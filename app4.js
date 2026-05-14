@@ -107,13 +107,11 @@ function closeRecModal() {
    WORKS SHOWCASE
 ══════════════════════════════════════ */
 const WORKS = [
-  { cat:'leaflet',   type:'image', src:'images/tirashi.png', title:'肝炎コーディネーターちらし', catLabel:'Leaflet'    },
+  { cat:'leaflet',   type:'image', src:'images/tirashi.png', title:'リーフレット',         catLabel:'Leaflet'    },
   { cat:'medical',   type:'image', src:'images/gra1.png',     title:'医療カンファレンス',   catLabel:'Healthcare'  },
   { cat:'diversity', type:'image', src:'images/gra2.jpg',     title:'ダイバーシティ研修',   catLabel:'Inclusion'   },
   { cat:'bilingual', type:'image', src:'images/gra3.png',     title:'バイリンガル対応',     catLabel:'Bilingual'   },
-  { cat:'animation', type:'video', src:'images/video1.mp4',   title:'SNSアニメーション',    catLabel:'Animation'   },
-  { cat:'medical',   type:'placeholder', src:null,            title:'ワークショップ',       catLabel:'Healthcare'  },
-  { cat:'diversity', type:'placeholder', src:null,            title:'インクルージョン研修', catLabel:'Inclusion'   },
+  { cat:'animation', type:'video', src:'images/video1.mp4',   title:'グラレコ動画',         catLabel:'Animation'   },
 ];
 
 let currentFilter  = 'all';

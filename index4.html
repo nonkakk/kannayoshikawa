@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blue Bee Ink — グラフィックレコーダー 吉川観奈</title>
+  <meta name="description" content="神戸発、ヘルスケア・多様性・バイリンガル対応のグラフィックレコーダー。吉川観奈（Blue Bee Ink）">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:wght@400;500;600;700;800&family=M+PLUS+Rounded+1c:wght@400;500;700&family=Caveat:wght@500;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── About: ベージュ調 オーバーライド ── */
+    .about-section {
+      background: linear-gradient(180deg, #F7F1E6 0%, #F1EADD 100%);
+    }
+    .about-section::before {
+      background: radial-gradient(circle, rgba(150, 120, 80, 0.10) 0%, transparent 70%);
+    }
+    /* 写真フレーム：白枠＋ベージュのオフセット影に変更 */
+    .about-photo {
+      box-shadow:
+        0 0 0 14px #FFFDF7,
+        24px 24px 0 #E4D9C3,
+        0 24px 60px rgba(120, 100, 70, 0.16);
+      background: #ECE2CE;
+    }
+    /* ワッシテープ：片方を温かみのあるテラコッタへ */
+    .about-section .washi-tape.bottom-right {
+      background: rgba(196, 124, 82, 0.55);
+      background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.20) 0 6px, transparent 6px 12px);
+    }
+    .about-section .washi-tape.top-left {
+      background: rgba(232, 180, 90, 0.60);
+      background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.22) 0 6px, transparent 6px 12px);
+    }
+    /* スキルタグ：ベージュ背景に映える紙色＋温かいボーダー */
+    .about-section .skill-tag {
+      background: #FFFDF7;
+      border-color: #E2D4B2;
+    }
+    .about-section .skill-tag:hover {
+      background: #FBF3DD;
+      border-color: #C9A968;
+      color: #6B4E1E;
+    }
+    .about-section .skill-tag::before {
+      color: #B89248;
+    }
+    .about-section .skill-tag.hl {
+      background: #F6E2DA;
+      border-color: rgba(170, 80, 50, 0.32);
+      color: #8C3D24;
+    }
+    .about-section .skill-tag.hl::before { color: #8C3D24; }
+    /* セクションタグ・小見出しを温色寄りに */
+    .about-section .sec-tag {
+      background: rgba(184, 146, 72, 0.10);
+      color: #8A6726;
+      border-color: rgba(184, 146, 72, 0.25);
+    }
+    .about-section .tag-dot { background: #B89248; }
+    .about-section .about-title { color: #8A6726; }
+    .about-section .hand-script {
+      color: #B07A3A;
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      font-size: 0.78em;
+      letter-spacing: 0.01em;
+      margin-left: 0.22em;
+      vertical-align: 0.10em;
+      white-space: nowrap;
+    }
+    /* About body と同じ調子のリード文（Recommend / Works 用） */
+    .lead-body {
+      font-family: var(--arial), 'Hiragino Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.95;
+      letter-spacing: 0;
+      margin: 6px 0 0;
+    }
+    .recommend-section .lead-body { color: #7AAED4; }
+    .works-section .lead-body { color: var(--text-mid); }
+    .recommend-section .recommend-sub { display: none; }
+    /* Service: 「4つの強み」を Contact 見出しと同サイズ・色で */
+    .services-section .lead-h {
+      font-family: var(--arial), 'Hiragino Sans', sans-serif;
+      font-size: clamp(24px, 3.5vw, 38px);
+      font-weight: 700;
+      color: var(--steel-dark);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      margin: 6px 0 0;
+    }
+    .services-section .anim-in:has(.lead-h) { margin-bottom: 0; }
+    .services-section .services-grid { margin-top: 0 !important; }
+    .works-section .works-title {
+      font-family: var(--arial), 'Hiragino Sans', sans-serif;
+      font-size: clamp(24px, 3.5vw, 38px);
+      font-weight: 700;
+      color: var(--steel-dark);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      margin: 6px 0 4px;
+    }
+    /* About: セクションタグと名前の間を開ける */
+    .about-section .sec-tag { margin-bottom: 22px; }
+    /* スクロールジャンプ位置をナビ高さ分オフセット */
+    #home, #about, #recommend, #service, #works, #contact {
+      scroll-margin-top: 96px;
+    }
+    /* スクロール時の上部カラーバーを非表示 */
+    #progress-bar { display: none !important; }
+    /* 1. 「4つの専門領域」に波線を追加 */
+    .services-section .lead-h .wavy {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+    .services-section .lead-h .wavy::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -2px;
+      height: 8px;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'><path d='M2 6 Q 12 1 22 5 T 42 5 T 62 5 T 82 5 T 102 5 T 118 5' fill='none' stroke='%232E6090' stroke-width='2.5' stroke-linecap='round'/></svg>");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      pointer-events: none;
+    }
+    /* 2. サービスアイコン：洗練された線画 SVG に */
+    .services-section .service-icon {
+      width: 56px; height: 56px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0;
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .services-section .service-icon svg {
+      width: 28px; height: 28px;
+      stroke-width: 1.6;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .services-section .service-icon-1 { background: #E8F1FA; }
+    .services-section .service-icon-1 svg { stroke: #2E6090; }
+    .services-section .service-icon-2 { background: #F4ECDF; }
+    .services-section .service-icon-2 svg { stroke: #9A6E2C; }
+    .services-section .service-icon-3 { background: #E5F1ED; }
+    .services-section .service-icon-3 svg { stroke: #2F6B58; }
+    .services-section .service-icon-4 { background: #F1E8EE; }
+    .services-section .service-icon-4 svg { stroke: #7E3858; }
+    /* 3. SNS タイトル（Recommend / Service と同じ調子） */
+    .sns-section .container { display: flex; flex-direction: column; gap: 28px; }
+    .sns-section .sns-head .sec-tag { margin-bottom: 8px; }
+    .sns-section .sns-h2 {
+      font-family: var(--arial);
+      font-size: clamp(28px, 3.5vw, 46px);
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin: 0 0 6px;
+    }
+    .sns-section .sns-h2 em {
+      font-style: normal;
+      color: var(--steel-dark);
+      position: relative;
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+    .sns-section .sns-h2 em::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -2px;
+      height: 8px;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'><path d='M2 6 Q 12 1 22 5 T 42 5 T 62 5 T 82 5 T 102 5 T 118 5' fill='none' stroke='%232E6090' stroke-width='2.5' stroke-linecap='round'/></svg>");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
+    .sns-section .lead-body { color: var(--text-mid); margin-bottom: 8px; }
+    /* 4. トップ画像の文字パネル（テスト用・クラスを外せばオフ） */
+    .hero-text-panel .hero-left {
+      background: rgba(15, 30, 55, 0.55);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      padding: 28px 30px 28px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.22);
+      max-width: 360px;
+      width: fit-content;
+    }
+    .hero-text-panel .hero-h1,
+    .hero-text-panel .hero-sub,
+    .hero-text-panel .hero-kicker,
+    .hero-text-panel .hero-stat-num,
+    .hero-text-panel .hero-stat-label { text-shadow: none; }
+    /* ボックス内の水色を clarity カラーに揃える */
+    .hero-text-panel .hero-kicker { color: #6FB6FF; }
+    .hero-text-panel .hero-sub { color: #BDDDFF; }
+    /* 下部のステッツ行を非表示 */
+    .hero-text-panel .hero-stats { display: none !important; }
+    /* hero-sub の br を無効化して 1 行に */
+    .hero-text-panel .hero-sub br { display: none; }
+    .hero-text-panel .hero-sub br:first-of-type { display: inline; }
+    /* hero-kicker を 1 行に */
+    .hero-text-panel .hero-kicker { color: #6FB6FF; white-space: nowrap; }
+    /* hero-sub：「伝わるビジュアルへ。」で改行、以降は自然折り返し */
+    .hero-text-panel .hero-sub { white-space: normal; }
+    .contact-section .contact-h2 em { font-style: normal; }
+    .contact-section .contact-h2 em::after { display: none !important; content: none !important; background: none !important; }
+    /* Service タイトルを Contact 見出しと同スタイルで */
+    .services-section .lead-h { display: block !important; }
+    /* SNS カード：枠・アイコンを取って埋め込みエリアのみ */
+    .sns-section .sns-card {
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+    }
+    .sns-section .sns-card-header { display: none !important; }
+    /* ヒーロー画像の左半分を 30% 暗く / 右半分を 10% 明るく */
+    .hero .hero-overlay {
+      background:
+        linear-gradient(to right, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.30) 45%, rgba(0,0,0,0) 60%),
+        linear-gradient(to right, rgba(0,0,0,0) 50%, rgba(255,255,255,0.10) 70%, rgba(255,255,255,0.10) 100%),
+        linear-gradient(
+          110deg,
+          rgba(14, 42, 80, 0.62) 0%,
+          rgba(30, 58, 96, 0.40) 50%,
+          rgba(46, 96, 144, 0.14) 100%
+        ) !important;
+    }
+    /* 作品タイトルを他セクション見出しと同じフォントに */
+    .showcase-title {
+      font-family: var(--arial), 'Hiragino Sans', sans-serif !important;
+      font-weight: 700 !important;
+      font-style: normal !important;
+      letter-spacing: 0.01em;
+    }
+    /* ナビ SNS アイコンを水色（元の steel）に戻す */
+    .nav .nav-social-link { color: var(--steel); }
+    .nav .nav-social-link:hover { color: var(--steel-dark); }
+    /* EN リンクと More ボタンを一旦非表示（英語ページ／一覧ページができたら復活） */
+    .nav-lang { display: none !important; }
+    .recommend-section .more-link,
+    .works-section .more-link { display: none !important; }
+    /* ヒーローの clarity を水色（やや白め）に */
+    .hero-h1 em {
+      color: #B8D8F5;
+      text-shadow: 0 1px 8px rgba(0,30,80,0.55), 0 0 28px rgba(120,180,240,0.35);
+    }
+    .hero-h1 em::after {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'><path d='M2 6 Q 12 1 22 5 T 42 5 T 62 5 T 82 5 T 102 5 T 118 5' fill='none' stroke='%23B8D8F5' stroke-width='2.5' stroke-linecap='round'/></svg>");
+    }
+    /* hero-kicker と btn-outline の青も同系の水色に */
+    .hero .hero-kicker { color: #B8D8F5 !important; }
+    .hero .hero-kicker::before { background: #B8D8F5 !important; }
+    /* Works を見るボタン：マルーンと並ぶダークブルー × 白抜き */
+    .hero .btn-outline {
+      color: #ffffff !important;
+      border: none !important;
+      background: #1E3A5F !important;
+      box-shadow: 0 4px 0 #14283F, 0 10px 22px rgba(20,40,63,0.35);
+    }
+    .hero .btn-outline:hover {
+      background: #16304E !important;
+      color: #ffffff !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #14283F, 0 12px 26px rgba(20,40,63,0.42);
+    }
+    /* hero-stats（200+ ～ 神戸）を非表示 */
+    .hero .hero-stats { display: none !important; }
+    /* hero-dots を白塗りに */
+    .hero .hero-dot { background: rgba(255,255,255,0.55) !important; border-color: rgba(255,255,255,0.55) !important; }
+    .hero .hero-dot.active { background: #ffffff !important; border-color: #ffffff !important; }
+    /* hero-stat-num の色も同系に */
+    .hero .hero-stat-num { color: #B8D8F5 !important; }
+    /* モバイルで Newsletter を最後に */
+    @media (max-width: 900px) {
+      .contact-layout {
+        display: flex !important;
+        flex-direction: column;
+        gap: 32px;
+      }
+      .contact-left { display: contents; }
+      .contact-left > .contact-h2 { order: 1; }
+      .contact-left > .contact-desc { order: 2; }
+      .contact-left > .cal-wrap { order: 3; }
+      .contact-right { order: 4; }
+      .contact-left > .nl-box { order: 5; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- ── NAV ── -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo">
+      <img src="images/logo_trans.png" alt="Blue Bee Ink" class="nav-logo-img">
+    </a>
+    <div class="nav-links" id="nav-links">
+      <a href="#home"      class="nav-link">Home</a>
+      <a href="#about"     class="nav-link">About</a>
+      <a href="#recommend" class="nav-link">Recommend</a>
+      <a href="#service"   class="nav-link">Service</a>
+      <a href="#works"     class="nav-link">Works</a>
+      <a href="index_en.html" class="nav-link nav-lang" title="English Page">EN</a>
+      <a href="#contact"   class="nav-cta">Contact →</a>
+      <div class="nav-socials">
+        <a href="https://www.instagram.com/smachet777" target="_blank" rel="noopener" class="nav-social-link" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" class="nav-social-link" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29.1 29.1 0 0 0 1 12a29.1 29.1 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29.1 29.1 0 0 0 23 12a29.1 29.1 0 0 0-.46-5.58zM9.75 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/kanna-yoshikawa-39741422b/" target="_blank" rel="noopener" class="nav-social-link" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="nav-hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#home"      class="nav-link" onclick="closeMenu()">Home</a>
+  <a href="#about"     class="nav-link" onclick="closeMenu()">About</a>
+  <a href="#recommend" class="nav-link" onclick="closeMenu()">Recommend</a>
+  <a href="#service"   class="nav-link" onclick="closeMenu()">Service</a>
+  <a href="#works"     class="nav-link" onclick="closeMenu()">Works</a>
+  <a href="index_en.html" class="nav-link nav-lang" onclick="closeMenu()">EN</a>
+  <a href="#contact"   class="nav-cta"  onclick="closeMenu()">Contact →</a>
+</div>
+
+<!-- ── HERO ── -->
+<section id="home" class="hero">
+  <div class="hero-slides" id="hero-slides">
+    <div class="hero-slide active" style="background-image:url('images/gra1.png');"></div>
+    <div class="hero-slide"        style="background-image:url('images/gra2.jpg');"></div>
+    <div class="hero-slide"        style="background-image:url('images/gra3.png');"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <svg class="doodle bob" style="top:18%;right:8%;width:60px;--rot:8deg;" viewBox="0 0 60 60"><circle cx="30" cy="30" r="22" fill="none" stroke="#FFE9D6" stroke-width="2.4" stroke-dasharray="4 5"/></svg>
+  <svg class="doodle bob" style="bottom:16%;right:18%;width:90px;--rot:-12deg;animation-delay:.6s;" viewBox="0 0 100 30"><path d="M4 18 Q 20 4 36 18 T 68 18 T 96 18" fill="none" stroke="#7AAED4" stroke-width="3" stroke-linecap="round"/></svg>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <p class="hero-kicker">Graphic Recorder · Bilingual · Kobe</p>
+      <h1 class="hero-h1">Ideas drawn<br>into <span class="wavy-underline"><em>clarity.</em></span></h1>
+      <p class="hero-sub">
+        複雑なアイデアを、伝わるビジュアルへ。<br>
+        ヘルスケア・多様性・バイリンガル対応の<br>
+        グラフィックレコーディングサービス。
+      </p>
+      <div class="hero-btns">
+        <a href="#contact"><button class="btn-primary">お問い合わせ →</button></a>
+        <a href="#works"><button class="btn-outline">Works を見る</button></a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-num">200+</div><div class="hero-stat-label">Sessions</div></div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat"><div class="hero-stat-num">日 / EN</div><div class="hero-stat-label">Bilingual</div></div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat"><div class="hero-stat-num">神戸</div><div class="hero-stat-label">Based in Kobe</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-dots" id="hero-dots">
+    <button class="hero-dot active" onclick="goToSlide(0)" aria-label="スライド1"></button>
+    <button class="hero-dot"        onclick="goToSlide(1)" aria-label="スライド2"></button>
+    <button class="hero-dot"        onclick="goToSlide(2)" aria-label="スライド3"></button>
+  </div>
+</section>
+
+<!-- ── MISSION ── -->
+<section class="mission-section">
+  <div class="mission-inner anim-in">
+    <img src="images/logo_trans.png" alt="Blue Bee Ink" class="mission-bee">
+    <div class="mission-text-col">
+      <h2 class="mission-h2"><span>Blue Bee Ink</span> という名前の由来</h2>
+      <p class="mission-body">「青い蜂」は幸運の象徴。ミツバチはランダムに飛んでいるように見えて、実はとても目的を持って動き、飛ぶ先々で花粉を運び、新しい命をつなぎます。グラフィックレコーディングも、それと同じ。会議やイベントのエッセンスをすくい取り、アイデアを組織のあちこちへ届け、広げていく力を持っています。良いコミュニケーションと大切な場の体験を、グラフィックの力で残す——ビジュアル記録を通じて、あなたのビジネスに幸運を呼び込みましょう。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about" class="section about-section">
+  <div class="container">
+    <div class="about-layout">
+      <div class="anim-in">
+        <div class="sec-tag"><span class="tag-dot"></span>About me</div>
+        <h2 class="about-h2">吉川観奈 <span class="hand-script">Kanna Yoshikawa</span></h2>
+        <p class="about-title">Graphic Recorder · Blue Bee Ink · Kobe, Japan</p>
+        <p class="about-body">
+          外資系製薬企業での経験を活かし、神戸を拠点にヘルスケア・多様性・バイリンガルに特化したグラフィックレコーディングを提供しています。医療・製薬分野の専門知識と、日英バイリンガルの強みを生かしたビジュアル制作が得意です。アニメーション制作にも力を入れ、SNSで広がるコンテンツも手がけています。
+        </p>
+        <div class="skill-row">
+          <span class="skill-tag hl">Healthcare</span>
+          <span class="skill-tag">Diversity &amp; Inclusion</span>
+          <span class="skill-tag hl">Bilingual 日/EN</span>
+          <span class="skill-tag">Animation</span>
+          <span class="skill-tag">Pharma Industry</span>
+        </div>
+      </div>
+      <div class="about-photo-col anim-in" style="transition-delay:.12s">
+        <div class="about-photo">
+          <img src="images/aboutme.jpg" alt="吉川観奈" onerror="this.style.display='none'">
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ROLES ── -->
+<section class="roles-section">
+  <div class="container">
+    <div class="roles-grid">
+      <div class="role-card anim-in" style="transition-delay:.06s">
+        <div class="role-logo">✏️</div>
+        <div class="role-body">
+          <span class="role-badge">2026 – 2027</span>
+          <div class="role-title">Neuland Ambassador</div>
+          <div class="role-org">Neuland GmbH &amp; Co. KG（ドイツ）</div>
+          <p class="role-period">グラフィックレコーディング用マーカーの世界的ブランド、ノイランドのアンバサダーとして活動。ビジュアルファシリテーションの普及に貢献します。</p>
+          <img src="images/ambassador.jpg" alt="Neuland Ambassador認定証" class="role-ambassador-img" onclick="openImageLightbox('images/ambassador.jpg','Neuland Ambassador 認定証')" onerror="this.style.display='none'">
+          <a href="https://www.neuland.com/en/pages/ambassadors" target="_blank" rel="noopener" class="role-link">Neuland Ambassadors →</a>
+        </div>
+      </div>
+      <div class="role-card anim-in" style="transition-delay:.12s">
+        <div class="role-logo" style="background:#EBF3FB;">🌐</div>
+        <div class="role-body">
+          <span class="role-badge">2026 – 2028</span>
+          <div class="role-title">Board Member</div>
+          <div class="role-org">IFVP — International Forum of Visual Practitioners</div>
+          <p class="role-period">ビジュアルプラクティショナーの国際組織 IFVPのボードメンバーとして、グラフィックレコーディングの国際的な発展に貢献します。</p>
+          <a href="https://www.ifvp.org/users/kannapple555-gmail-com" target="_blank" rel="noopener" class="role-link">IFVPプロフィール →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--off-white);">
+  <svg viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="48">
+    <path d="M0,0 C300,48 700,0 1200,32 L1200,48 L0,48 Z" fill="#1E3A5F"/>
+  </svg>
+</div>
+
+<!-- ── RECOMMEND ── -->
+<section id="recommend" class="recommend-section" style="position:relative;">
+  <div class="recommend-head">
+    <div>
+      <div class="sec-tag" style="color:#7AAED4;"><span class="tag-dot" style="border-color:#7AAED4;background:#800000;"></span>Recommend</div>
+      <h2 class="recommend-h2">お客さまの声と<br><em>推薦のことば</em></h2>
+      <p class="lead-body">実際にご依頼いただいた方や、グラフィックレコーディング関係者から<br>いただいた推薦コメントをご紹介します。</p>
+    </div>
+    <a href="#" class="more-link" style="color:#7AAED4;border-color:#7AAED4;">More →</a>
+  </div>
+  <div class="marquee-section">
+    <div class="marquee-row"><div class="marquee-track" id="mq-row1"></div></div>
+    <div class="marquee-row reverse"><div class="marquee-track" id="mq-row2"></div></div>
+  </div>
+</section>
+
+<div class="rec-modal" id="rec-modal" onclick="closeRecModal()">
+  <div class="rec-modal-inner" onclick="event.stopPropagation()">
+    <button class="rec-modal-close" onclick="closeRecModal()">✕</button>
+    <div class="rec-modal-keyword" id="rec-modal-keyword"></div>
+    <div class="rec-modal-text" id="rec-modal-text"></div>
+    <div class="rec-modal-from" id="rec-modal-from"></div>
+  </div>
+</div>
+
+<div class="wave" style="background:#1E3A5F;">
+  <svg viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="48">
+    <path d="M0,0 C200,48 400,0 600,24 C800,48 1000,0 1200,0 L1200,48 L0,48 Z" fill="#EBF3FB"/>
+  </svg>
+</div>
+
+<!-- ── SERVICES ── -->
+<section id="service" class="section services-section">
+  <div class="container">
+    <div class="anim-in">
+      <div class="sec-tag"><span class="tag-dot"></span>Service</div>
+      <h2 class="lead-h">4つの<span class="wavy">専門領域</span></h2>
+    </div>
+    <div class="services-grid" style="margin-top:40px;">
+      <div class="service-card anim-in"><div class="service-icon service-icon-1"><svg viewBox="0 0 32 32"><path d="M16 27c-5-3.5-9-7.2-9-12a5.2 5.2 0 0 1 9-3.5A5.2 5.2 0 0 1 25 15c0 4.8-4 8.5-9 12Z"/><path d="M16 14v6M13 17h6"/></svg></div><div class="service-name">Healthcare</div><div class="service-desc">製薬・医療・ヘルスケア分野の専門知識で、複雑な内容もわかりやすいビジュアルに。外資系製薬企業出身のバックグラウンドを活かします。</div></div>
+      <div class="service-card anim-in" style="transition-delay:0.08s"><div class="service-icon service-icon-2"><svg viewBox="0 0 32 32"><circle cx="11" cy="13" r="3.5"/><circle cx="21" cy="13" r="3.5"/><circle cx="16" cy="21" r="3.5"/><path d="M13.5 15.5 14.5 18.5M18.5 15.5 17.5 18.5M14.4 13 17.6 13"/></svg></div><div class="service-name">Inclusion</div><div class="service-desc">多様性・インクルージョンをテーマにしたワークショップやカンファレンスで、あらゆる声を丁寧にビジュアル化します。</div></div>
+      <div class="service-card anim-in" style="transition-delay:0.16s"><div class="service-icon service-icon-3"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11"/><path d="M5 16h22M16 5a18 18 0 0 1 0 22M16 5a18 18 0 0 0 0 22"/><path d="M7 11c2 1.4 5 2.4 9 2.4S23 12.4 25 11M7 21c2-1.4 5-2.4 9-2.4S23 19.6 25 21"/></svg></div><div class="service-name">English</div><div class="service-desc">日英バイリンガル対応で、国際会議や外資系企業のミーティングもシームレスにサポートします。</div></div>
+      <div class="service-card anim-in" style="transition-delay:0.24s"><div class="service-icon service-icon-4"><svg viewBox="0 0 32 32"><rect x="4" y="8" width="20" height="14" rx="2.5"/><path d="M24 12.5 28.5 9.5v11L24 17.5" stroke-linejoin="round"/><path d="M9 15l4 2.5L9 20zM9 15v5" stroke-linejoin="round"/></svg></div><div class="service-name">Animation</div><div class="service-desc">グラレコをそのままアニメーションに。SNSで広がるモーションコンテンツとして情報の届く力を高めます。</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--steel-light);">
+  <svg viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="48">
+    <path d="M0,24 C300,0 600,48 900,24 C1050,12 1150,36 1200,24 L1200,48 L0,48 Z" fill="#ffffff"/>
+  </svg>
+</div>
+
+<!-- ── SNS ── -->
+<section class="sns-section">
+  <div class="container">
+    <div class="sns-head anim-in">
+      <div class="sec-tag"><span class="tag-dot"></span>SNS</div>
+    </div>
+    <div class="sns-grid">
+      <div class="sns-card anim-in" style="transition-delay:.06s">
+        <div class="sns-card-header"><div class="sns-card-icon">📸</div><div class="sns-card-name">Instagram</div></div>
+        <div class="sns-embed-area" id="instagram-embed">埋め込みコードをここに追加</div>
+      </div>
+      <div class="sns-card anim-in" style="transition-delay:.12s">
+        <div class="sns-card-header"><div class="sns-card-icon" style="background:#FFF8E8;">📝</div><div class="sns-card-name">note</div></div>
+        <div class="sns-embed-area" id="note-embed">
+          <div id="note-widget"><div class="note-loading">読み込み中...</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--white);">
+  <svg viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="48">
+    <path d="M0,24 C300,0 600,48 900,24 C1050,12 1150,36 1200,24 L1200,48 L0,48 Z" fill="#F4F8FC"/>
+  </svg>
+</div>
+
+<!-- ── WORKS ── -->
+<section id="works" class="section works-section">
+  <div class="container">
+    <div class="works-header">
+      <div>
+        <div class="sec-tag"><span class="tag-dot"></span>Works</div>
+        <h2 class="works-title">実績・作品</h2>
+        <p class="lead-body">過去の作品やアニメーションをご紹介します。</p>
+      </div>
+      <a href="#" class="more-link">More →</a>
+    </div>
+    <div class="filter-row" id="filter-row">
+      <button class="pill active" data-filter="all"       onclick="setFilter(this,'all')">All</button>
+      <button class="pill"        data-filter="medical"   onclick="setFilter(this,'medical')">Healthcare</button>
+      <button class="pill"        data-filter="diversity" onclick="setFilter(this,'diversity')">Inclusion</button>
+      <button class="pill"        data-filter="animation" onclick="setFilter(this,'animation')">Animation</button>
+      <button class="pill"        data-filter="bilingual" onclick="setFilter(this,'bilingual')">Bilingual</button>
+      <button class="pill"        data-filter="leaflet"   onclick="setFilter(this,'leaflet')">Leaflet</button>
+    </div>
+  </div>
+  <div class="showcase-outer" id="showcase-outer">
+    <div id="showcase-inner"></div>
+    <button class="showcase-arrow showcase-prev" onclick="showcaseNav(-1)" aria-label="前の作品">‹</button>
+    <button class="showcase-arrow showcase-next" onclick="showcaseNav(1)"  aria-label="次の作品">›</button>
+    <div class="showcase-hint">クリックで拡大表示</div>
+  </div>
+  <div class="showcase-dots" id="showcase-dots"></div>
+</section>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div class="lightbox-inner" id="lightbox-inner" onclick="event.stopPropagation()"></div>
+</div>
+
+<div class="wave" style="background:#F4F8FC;">
+  <svg viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="48">
+    <path d="M0,0 C400,48 800,0 1200,24 L1200,48 L0,48 Z" fill="#EBF3FB"/>
+  </svg>
+</div>
+
+<!-- ── CONTACT ── -->
+<section id="contact" class="section contact-section">
+  <div class="container">
+    <div class="sec-tag"><span class="tag-dot"></span>Contact</div>
+    <div class="contact-layout">
+      <div class="contact-left">
+        <h2 class="contact-h2"><em>お問い合わせ</em></h2>
+        <p class="contact-desc">ご依頼や打ち合わせのご相談はお気軽に。<br>赤い日付が対応可能な日程です。</p>
+        <div class="cal-wrap">
+          <div class="cal-head">
+            <div class="cal-head-left">
+              <span class="cal-month" id="cal-month-label">読み込み中...</span>
+              <span class="cal-sync-badge" id="cal-sync-badge"><span class="cal-sync-dot"></span>Googleカレンダー連携</span>
+            </div>
+            <div class="cal-nav">
+              <button class="cal-arr" onclick="changeMonth(-1)">‹</button>
+              <button class="cal-arr cal-arr-today" onclick="goToToday()">今月</button>
+              <button class="cal-arr" onclick="changeMonth(1)">›</button>
+            </div>
+          </div>
+          <div class="cal-loading" id="cal-loading"><div class="cal-loading-spinner"></div><span>読み込み中...</span></div>
+          <div class="cal-error" id="cal-error" style="display:none;"><p class="cal-error-msg" id="cal-error-msg"></p><button class="cal-retry-btn" onclick="initCalendar()">再読み込み</button></div>
+          <div class="cal-body" id="cal-body" style="display:none;">
+            <div class="cal-grid" id="cal-grid"></div>
+            <div class="cal-event-detail" id="cal-event-detail" style="display:none;">
+              <div class="cal-event-detail-header"><span id="cal-event-date"></span><button class="cal-event-close" onclick="closeEventDetail()">✕</button></div>
+              <div id="cal-event-list"></div>
+            </div>
+          </div>
+          <div class="cal-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--maroon);"></div>対応可能</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f0f2f4;border:1px solid #cdd3da;"></div>予約済み</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#fff;border:2.5px solid var(--maroon);"></div>今日</div>
+          </div>
+        </div>
+        <div class="nl-box anim-in">
+          <h3 class="nl-title">Newsletter</h3>
+          <p class="nl-desc">グラレコ Tips・新作・イベント情報を月1回お届けします</p>
+          <div class="nl-row">
+            <input class="nl-input" type="email" placeholder="メールアドレスを入力">
+            <button class="nl-btn">登録する</button>
+          </div>
+        </div>
+      </div>
+      <div class="contact-right anim-in" style="transition-delay:0.1s">
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="form-card-icon">✉️</div>
+            <div>
+              <div class="form-card-title">お問い合わせフォーム</div>
+              <div class="form-card-sub">2営業日以内にご返信いたします</div>
+            </div>
+          </div>
+          <div class="form-body">
+            <div class="form-row">
+              <div class="form-field"><label class="form-label">お名前 <span class="form-req">*</span></label><input class="form-input" type="text" placeholder="例：山田 花子"></div>
+              <div class="form-field"><label class="form-label">会社名・団体名</label><input class="form-input" type="text" placeholder="例：株式会社〇〇（任意）"></div>
+            </div>
+            <div class="form-field"><label class="form-label">メールアドレス <span class="form-req">*</span></label><input class="form-input" type="email" placeholder="例：hanako@example.com"></div>
+            <div class="form-field"><label class="form-label">ご依頼の種類 <span class="form-req">*</span></label>
+              <select class="form-select">
+                <option value="">選択してください</option>
+                <option value="medical">Healthcare（医療・ヘルスケア）</option>
+                <option value="diversity">Inclusion（多様性・インクルージョン）</option>
+                <option value="english">English（日英バイリンガル）</option>
+                <option value="animation">Animation（SNSアニメーション）</option>
+                <option value="other">その他</option>
+              </select>
+            </div>
+            <div class="form-field"><label class="form-label">ご希望の時期</label><input class="form-input" type="text" placeholder="例：2025年6月ごろ"></div>
+            <div class="form-field"><label class="form-label">ご依頼内容・ご質問</label><textarea class="form-textarea" placeholder="イベントの概要、参加人数、言語（日本語／英語）などをお聞かせください。"></textarea></div>
+            <button class="btn-submit">送信する →</button>
+            <p class="form-note">※ 送信後、2営業日以内にご返信いたします。<br>メールでのお問い合わせは <a href="mailto:hello@bluebeeink.com">hello@bluebeeink.com</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <img src="images/logo_white.png" alt="Blue Bee Ink" class="footer-logo-img">
+        <div class="footer-tagline">Graphic Recorder · Kobe, Japan</div>
+      </div>
+      <nav class="footer-nav">
+        <div class="footer-nav-group">
+          <h4>Navigation</h4>
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#recommend">Recommend</a>
+          <a href="#service">Service</a>
+          <a href="#works">Works</a>
+        </div>
+        <div class="footer-nav-group">
+          <h4>Contact</h4>
+          <a href="#contact">お問い合わせ</a>
+          <a href="mailto:hello@bluebeeink.com">hello@bluebeeink.com</a>
+          <a href="#">プライバシーポリシー</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 吉川観奈 · Kobe, Japan</p>
+      <div class="footer-social">
+        <a href="#">Instagram</a>
+        <a href="#">YouTube</a>
+        <a href="#">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="app4.js"></script>
+<script src="note-widget.js"></script>
+</body>
+</html>
