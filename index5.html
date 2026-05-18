@@ -297,6 +297,20 @@
         ) !important;
     }
     .hero .hero-slides { filter: brightness(1.25); }
+    /* モバイル：グラデーション幅を1.5倍に拡張 */
+    @media (max-width: 768px) {
+      .hero .hero-overlay {
+        background:
+          linear-gradient(to right, rgba(30,65,118,0.38) 0%, rgba(30,65,118,0.38) 68%, rgba(30,65,118,0) 90%),
+          linear-gradient(to right, rgba(255,255,255,0) 75%, rgba(255,255,255,0.29) 90%, rgba(255,255,255,0.29) 100%),
+          linear-gradient(
+            110deg,
+            rgba(22, 63, 125, 0.52) 0%,
+            rgba(52, 103, 157, 0.22) 75%,
+            rgba(135, 182, 220, 0.05) 100%
+          ) !important;
+      }
+    }
     /* Contact: カレンダーとフォームを同高に */
     .contact-section .contact-layout { align-items: stretch; }
     .contact-section .contact-left,
