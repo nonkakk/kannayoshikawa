@@ -62,6 +62,22 @@ const REC_DATA = [
     from: '日本製薬医学会 大会主催者',
     preview: '講演の内容を的確に整理し、医学・薬学・行政など幅広い分野の要点を、美しくわかりやすい図解としてまとめてくださいました。',
     full: `吉川さんは、私が主催した第14回日本製薬医学会年次大会において、グラフィックレコーダーとして大きな力を発揮してくれました。講演の内容を的確に整理し、医学・薬学・行政など幅広い分野の要点を、美しくわかりやすい図解としてまとめてくださいました。\n\nクロージングセッションでは、そのグラフィックをスクリーンに映しながら大会を総括し、参加者の記憶に鮮やかによみがえる講演内容と、図解による整理効果が相まって、会場全体に深い理解と感動が広がりました。\n\n吉川さんの作品は単なる記録にとどまらず、複雑な情報を整理し、視覚的に伝えることで知識の定着を促す力を持っています。`
+  },
+  {
+    keyword: '人は人の中で癒される',
+    from: '「人権・生命倫理・精神科医療」セミナー協力者',
+    preview: '辛い状況や問題群を表現しながらも、淡く柔らかい色調で包み込み、理想に向かって協力する決意を描き出してくれました。',
+    full: `私がグラレコに涙した理由－「人は人の中で癒される」\n\n2025年6月21日に神戸で開催されたハイブリッドセミナー「人権・生命倫理・精神科医療　改革のグランドデザインを語ろう！」に協力をいただいた吉川観奈さんのグラフィックレコーディング作品に、私は感涙してしまいました。グラレコ作品にこんなに心が打ち震える感動を受けるとは、思いも寄りませんでした。\n\nこの集いでは過酷な、非人道的ともいえる人権侵害の事例や、長期に及ぶ隔離による入院期間中に亡くなった患者さんの事例が伝えられました。しかしそうした人権侵害を無くすというだけでなく、当事者の方たちが創造的で楽しくハッピーな地域での生活を営んでいる取り組みも紹介されました。\n\n吉川さんが披露した7つのグラレコ作品は、それぞれの発表内容を素晴らしくとらえていました。その中でも胸を打たれたのは「人は人の中で癒される」という言葉とともに描かれた「母子像」です。美しい母親の弧を描くような髪と腕の中に抱かれた、涙を流しながらも微笑んでいる男の子。この姿に出会うと今も涙してしまいます。\n\n辛い状況や問題群を表現しながらも、ブルー、ピンク、紫、グリーンの淡く柔らかい色調で包み込まれ、心を寄せ合った神戸の街のシンボルとともに描かれた最後のグラレコは、理想に向かって力強く協力し、当事者・市民が主人公になって新しい世界を築いていく決意を描き出しました。\n\n吉川さんは、2回にわたる事前相談会にも参加してくださり、どんどん共感を深めてくださいました。打ち合わせ中の吉川さんの表情からも、感情の高まり、魂が引き込まれているような様子が感じられ、「社会共創」という言葉をそのまま体現するようでした。\n\n小さな力でも、心を寄せ合って、声を出し続ければ、きっと「世界を変えられる」。そんな確信を共有することができました。吉川さん、素敵な作品を本当にありがとうございました！`,
+    image: 'images/jinken.jpg',
+    imageAlt: '人権・生命倫理・精神科医療セミナーのグラフィックレコーディング'
+  },
+  {
+    keyword: '心強い伴走と象徴になる記録',
+    from: '肝炎医療コーディネーター講座 ご担当者',
+    preview: '講座直前まで試行錯誤を重ねる中で、相談できたことがとても心強く、活動を象徴する貴重な資材になりました。',
+    full: `初めてご連絡を差し上げて以来、何度も打ち合わせのお時間を頂戴し、その中から多くのアイディアを生み出すことができました。講座直前まで試行錯誤を重ねる中で、吉川様にご相談させていただけたことがどれほど心強かったか、感謝の気持ちでいっぱいです。\n\n今回の企画を通じて、私自身も改めて肝炎医療コーディネーター活動について深く向き合い、考える貴重な機会となりました。\n\nまた、作成いただいたグラフィックレコーダーは、鹿児島県の肝炎医療コーディネーター活動を象徴する大変貴重な資材であり、今後の研修会や講座でも大切に活用させていただきたく存じます。`,
+    image: 'images/tirashi.png',
+    imageAlt: '鹿児島県の肝炎医療コーディネーター活動のグラフィックレコーディング'
   }
 ];
 
@@ -92,7 +108,9 @@ function openRecModal(idx) {
   const d = REC_DATA[idx];
   if (!d) return;
   document.getElementById('rec-modal-keyword').textContent = d.keyword;
-  document.getElementById('rec-modal-text').innerHTML = d.full.split('\n\n').map(p => `<p>${p}</p>`).join('');
+  document.getElementById('rec-modal-text').innerHTML =
+    d.full.split('\n\n').map(p => `<p>${p}</p>`).join('') +
+    (d.image ? `<img src="${d.image}" alt="${d.imageAlt || ''}" class="rec-modal-img" onerror="this.style.display='none'">` : '');
   document.getElementById('rec-modal-from').textContent = '― ' + d.from;
   document.getElementById('rec-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -299,13 +317,12 @@ buildShowcase();
 applyFilter();
 
 /* ══════════════════════════════════════
-   GOOGLE CALENDAR API
+   GOOGLE CALENDAR VIA APPS SCRIPT
 ══════════════════════════════════════ */
 const GCAL_CONFIG = {
-  CALENDAR_ID: 'YOUR_CALENDAR_ID@gmail.com',
-  API_KEY:     'YOUR_GOOGLE_API_KEY',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyi-fRybVHUcp-R5n-agJ5ykfZ2J2mm41O4n5Od49-EgWlVQHsIFwRxJ4BYhW2dQ08/exec',
   SHOW_EVENT_TITLES: false,
-  MONTHS_TO_CACHE: 3,
+  CACHE_TTL_MS: 60 * 60 * 1000,
 };
 
 let calYear  = new Date().getFullYear();
@@ -314,37 +331,105 @@ let calEventCache = {};
 let calLoading = false;
 let selectedDate = null;
 
+function getCalendarCacheKey(year, month) {
+  return `site-calendar:${year}-${String(month).padStart(2,'0')}`;
+}
+
+function getCachedEvents(year, month) {
+  const key = getCalendarCacheKey(year, month);
+  const memoryCache = calEventCache[key];
+  const now = Date.now();
+  if (memoryCache && now - memoryCache.cachedAt < GCAL_CONFIG.CACHE_TTL_MS) {
+    return memoryCache.events;
+  }
+
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const stored = JSON.parse(raw);
+    if (!stored || !stored.cachedAt || !stored.events) return null;
+    if (now - stored.cachedAt >= GCAL_CONFIG.CACHE_TTL_MS) return null;
+    calEventCache[key] = stored;
+    return stored.events;
+  } catch (err) {
+    return null;
+  }
+}
+
+function setCachedEvents(year, month, events) {
+  const key = getCalendarCacheKey(year, month);
+  const payload = { cachedAt: Date.now(), events };
+  calEventCache[key] = payload;
+  try {
+    localStorage.setItem(key, JSON.stringify(payload));
+  } catch (err) {}
+}
+
+function loadAppsScriptEvents(year, month) {
+  return new Promise((resolve, reject) => {
+    const callbackName = `handleCalendarEvents_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const script = document.createElement('script');
+    const timeout = window.setTimeout(() => {
+      cleanup();
+      reject(new Error('Apps Scriptからの応答がありません。'));
+    }, 12000);
+
+    function cleanup() {
+      window.clearTimeout(timeout);
+      delete window[callbackName];
+      script.remove();
+    }
+
+    window[callbackName] = data => {
+      cleanup();
+      resolve(data || { items: [] });
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error('Apps Scriptの読み込みに失敗しました。'));
+    };
+
+    const url = new URL(GCAL_CONFIG.APPS_SCRIPT_URL);
+    url.searchParams.set('year', year);
+    url.searchParams.set('month', month);
+    url.searchParams.set('callback', callbackName);
+    script.src = url.toString();
+    document.head.appendChild(script);
+  });
+}
+
 async function fetchEvents(year, month) {
-  const key = `${year}-${String(month).padStart(2,'0')}`;
-  if (calEventCache[key]) return calEventCache[key];
-  const timeMin = new Date(year, month - 1, 1).toISOString();
-  const timeMax = new Date(year, month, 0, 23, 59, 59).toISOString();
-  const url = new URL('https://www.googleapis.com/calendar/v3/calendars/' +
-    encodeURIComponent(GCAL_CONFIG.CALENDAR_ID) + '/events');
-  url.searchParams.set('key',          GCAL_CONFIG.API_KEY);
-  url.searchParams.set('timeMin',      timeMin);
-  url.searchParams.set('timeMax',      timeMax);
-  url.searchParams.set('singleEvents', 'true');
-  url.searchParams.set('orderBy',      'startTime');
-  url.searchParams.set('maxResults',   '250');
-  const res = await fetch(url.toString());
-  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e?.error?.message || `API Error ${res.status}`); }
-  const data = await res.json();
+  const cached = getCachedEvents(year, month);
+  if (cached) return cached;
+
+  const data = await loadAppsScriptEvents(year, month);
   const byDate = {};
   (data.items||[]).forEach(ev => {
-    const start = ev.start?.date || ev.start?.dateTime?.slice(0,10);
-    const end   = ev.end?.date   || ev.end?.dateTime?.slice(0,10);
+    const start = ev.startDate || ev.start?.date || ev.start?.dateTime?.slice(0,10) || ev.start?.slice?.(0,10);
+    const end   = ev.endDate   || ev.end?.date   || ev.end?.dateTime?.slice(0,10)   || ev.end?.slice?.(0,10) || start;
     if (!start) return;
-    let cur = new Date(start);
-    const endD = new Date(end);
-    while (cur < endD) {
-      const d = cur.toISOString().slice(0,10);
+    let cur = new Date(start + 'T00:00:00');
+    const endD = new Date(end + 'T00:00:00');
+    const maxLoops = 370;
+    let loops = 0;
+    const isAllDay = !!ev.allDay || !!ev.start?.date;
+    const isInRange = () => isAllDay ? cur < endD : cur <= endD;
+    while (isInRange() && loops < maxLoops) {
+      const d = `${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}-${String(cur.getDate()).padStart(2,'0')}`;
       if (!byDate[d]) byDate[d]=[];
-      byDate[d].push({ id:ev.id, title:ev.summary||'予定あり', allDay:!!ev.start?.date, start:ev.start?.dateTime, end:ev.end?.dateTime });
+      byDate[d].push({
+        id: ev.id,
+        title: ev.title || ev.summary || '予定あり',
+        allDay: isAllDay,
+        start: ev.start?.dateTime || ev.start,
+        end: ev.end?.dateTime || ev.end
+      });
       cur.setDate(cur.getDate()+1);
+      loops++;
     }
   });
-  calEventCache[key] = byDate;
+  setCachedEvents(year, month, byDate);
   return byDate;
 }
 
@@ -363,7 +448,7 @@ function getDemoEvents(year, month) {
 async function renderCalendar(year, month) {
   if (calLoading) return;
   calLoading = true;
-  const isDemo = (GCAL_CONFIG.API_KEY === 'YOUR_GOOGLE_API_KEY');
+  const isDemo = (GCAL_CONFIG.APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL');
   document.getElementById('cal-month-label').textContent = `${year}年 ${month}月`;
   document.getElementById('cal-loading').style.display = 'flex';
   document.getElementById('cal-error').style.display   = 'none';
@@ -373,7 +458,7 @@ async function renderCalendar(year, month) {
   try {
     eventsByDate = isDemo ? getDemoEvents(year, month) : await fetchEvents(year, month);
     document.querySelector('.cal-sync-badge').innerHTML =
-      `<span class="cal-sync-dot"></span>` + (isDemo ? 'デモ表示（APIキー未設定）' : 'Googleカレンダー連携中');
+      `<span class="cal-sync-dot"></span>` + (isDemo ? 'デモ表示（Apps Script URL未設定）' : 'Googleカレンダー連携中');
   } catch (err) {
     document.getElementById('cal-loading').style.display = 'none';
     document.getElementById('cal-error').style.display   = 'block';

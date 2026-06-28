@@ -7,8 +7,579 @@
   <meta name="description" content="神戸発、ヘルスケア・多様性・バイリンガル対応のグラフィックレコーダー。吉川観奈（Blue Bee Ink）">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:wght@400;500;600;700;800&family=M+PLUS+Rounded+1c:wght@400;500;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:wght@400;500;600;700;800&family=M+PLUS+Rounded+1c:wght@400;500;700&family=Caveat:wght@500;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── About: ベージュ調 オーバーライド ── */
+    .about-section {
+      background: linear-gradient(180deg, #F7F1E6 0%, #F1EADD 100%);
+    }
+    .about-section::before {
+      background: radial-gradient(circle, rgba(150, 120, 80, 0.10) 0%, transparent 70%);
+    }
+    /* 写真フレーム：白枠＋ベージュのオフセット影に変更 */
+    .about-photo {
+      box-shadow:
+        0 0 0 14px #FFFDF7,
+        24px 24px 0 #E4D9C3,
+        0 24px 60px rgba(120, 100, 70, 0.16);
+      background: #ECE2CE;
+    }
+    /* ワッシテープ：片方を温かみのあるテラコッタへ */
+    .about-section .washi-tape.bottom-right {
+      background: rgba(196, 124, 82, 0.55);
+      background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.20) 0 6px, transparent 6px 12px);
+    }
+    .about-section .washi-tape.top-left {
+      background: rgba(232, 180, 90, 0.60);
+      background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.22) 0 6px, transparent 6px 12px);
+    }
+    /* スキルタグ：ベージュ背景に映える紙色＋温かいボーダー */
+    .about-section .skill-tag {
+      background: #FFFDF7;
+      border-color: #E2D4B2;
+    }
+    .about-section .skill-tag:hover {
+      background: #FBF3DD;
+      border-color: #C9A968;
+      color: #6B4E1E;
+    }
+    .about-section .skill-tag::before {
+      color: #B89248;
+    }
+    .about-section .skill-tag.hl {
+      background: #F6E2DA;
+      border-color: rgba(170, 80, 50, 0.32);
+      color: #8C3D24;
+    }
+    .about-section .skill-tag.hl::before { color: #8C3D24; }
+    /* セクションタグ・小見出しを温色寄りに */
+    .about-section .sec-tag {
+      background: rgba(184, 146, 72, 0.10);
+      color: #8A6726;
+      border-color: rgba(184, 146, 72, 0.25);
+    }
+    .about-section .tag-dot { background: #B89248; }
+    .about-section .about-title { color: #8A6726; }
+    .about-section .hand-script {
+      color: #B07A3A;
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      font-size: 0.78em;
+      letter-spacing: 0.01em;
+      margin-left: 0.22em;
+      vertical-align: 0.10em;
+      white-space: nowrap;
+    }
+    /* About body と同じ調子のリード文（Recommend / Works 用） */
+    .lead-body {
+      font-family: var(--arial), 'Hiragino Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.95;
+      letter-spacing: 0;
+      margin: 6px 0 0;
+    }
+    .recommend-section .lead-body { color: #7AAED4; }
+    .works-section .lead-body { color: var(--text-mid); }
+    .recommend-section .recommend-sub { display: none; }
+    /* Service: 「4つの強み」を Contact 見出しと同サイズ・色で */
+    .services-section .lead-h {
+      font-family: var(--arial), 'Hiragino Sans', sans-serif;
+      font-size: clamp(24px, 3.5vw, 38px);
+      font-weight: 700;
+      color: var(--steel-dark);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      margin: 6px 0 0;
+    }
+    .services-section .anim-in:has(.lead-h) { margin-bottom: 0; }
+    .services-section .services-grid { margin-top: 0 !important; }
+    .works-section .works-title {
+      font-family: var(--arial), 'Hiragino Sans', sans-serif;
+      font-size: clamp(24px, 3.5vw, 38px);
+      font-weight: 700;
+      color: var(--steel-dark);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      margin: 6px 0 4px;
+    }
+    /* About: セクションタグと名前の間を開ける */
+    .about-section .sec-tag { margin-bottom: 22px; }
+    /* About: 所属・活動 */
+    .about-affiliations { margin-top: 22px; }
+    .affiliations-title {
+      font-family: var(--arial);
+      font-size: 15px;
+      font-weight: 700;
+      color: #8A6726;
+      letter-spacing: 0.02em;
+      margin: 0 0 10px 0;
+      padding-left: 12px;
+      border-left: 3px solid #C9A968;
+    }
+    .affiliations-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .affiliations-list li {
+      position: relative;
+      padding-left: 18px;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #5C4A2A;
+    }
+    .affiliations-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.7em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #B89248;
+    }
+    /* 所属・活動 内のクリック可能リンク */
+    .affiliation-link {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      background: none;
+      border: 0;
+      padding: 0 2px;
+      margin: 0;
+      font: inherit;
+      color: #8A6726;
+      font-weight: 700;
+      cursor: pointer;
+      border-bottom: 1.5px dotted #C9A968;
+      transition: color .2s, border-color .2s, background .2s;
+    }
+    .affiliation-link:hover {
+      color: #6B4E1E;
+      border-bottom-style: solid;
+      background: rgba(201, 169, 104, 0.12);
+    }
+    .affiliation-link-arrow {
+      font-size: 0.85em;
+      opacity: 0.7;
+    }
+    /* Affiliation modal */
+    .affiliation-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 24, 16, 0.55);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+    .affiliation-modal.open {
+      display: flex;
+      opacity: 1;
+    }
+    .affiliation-modal-inner {
+      background: #FFFDF7;
+      border-radius: 16px;
+      max-width: 520px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 36px 32px 32px;
+      position: relative;
+      box-shadow: 0 24px 64px rgba(60, 40, 10, 0.30);
+      border: 1px solid #E2D4B2;
+      animation: affiliationModalIn .3s ease;
+    }
+    @keyframes affiliationModalIn {
+      from { transform: translateY(12px) scale(.98); opacity: 0; }
+      to   { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .affiliation-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 0;
+      background: rgba(184, 146, 72, 0.12);
+      color: #6B4E1E;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s;
+    }
+    .affiliation-modal-close:hover { background: rgba(184, 146, 72, 0.25); }
+    .affiliation-modal-badge {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+      color: #8A6726;
+      background: rgba(184, 146, 72, 0.14);
+      border: 1px solid rgba(184, 146, 72, 0.30);
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+    .affiliation-modal-title {
+      font-family: var(--arial);
+      font-size: 22px;
+      font-weight: 800;
+      color: #5C4A2A;
+      margin: 0 0 4px;
+      letter-spacing: -0.01em;
+    }
+    .affiliation-modal-org {
+      font-size: 13.5px;
+      color: #8A6726;
+      margin-bottom: 14px;
+    }
+    .affiliation-modal-text {
+      font-size: 14px;
+      line-height: 1.85;
+      color: #4A3A20;
+      margin: 0 0 18px;
+    }
+    .affiliation-modal-img {
+      display: block;
+      width: 55%;
+      max-width: 240px;
+      margin-left: auto;
+      margin-right: auto;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(60, 40, 10, 0.16);
+      cursor: zoom-in;
+    }
+    .affiliation-modal-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #8A6726;
+      text-decoration: none;
+      border-bottom: 1.5px solid #C9A968;
+      padding-bottom: 1px;
+      transition: color .2s, border-color .2s;
+    }
+    .affiliation-modal-link:hover {
+      color: #6B4E1E;
+      border-color: #8A6726;
+    }
+    /* スクロールジャンプ位置をナビ高さ分オフセット */
+    #home, #about, #recommend, #service, #works, #contact {
+      scroll-margin-top: 96px;
+    }
+    /* スクロール時の上部カラーバーを非表示 */
+    #progress-bar { display: none !important; }
+    /* 1. 「4つの専門領域」に波線を追加 */
+    .services-section .lead-h .wavy {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+    .services-section .lead-h .wavy::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -2px;
+      height: 8px;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'><path d='M2 6 Q 12 1 22 5 T 42 5 T 62 5 T 82 5 T 102 5 T 118 5' fill='none' stroke='%232E6090' stroke-width='2.5' stroke-linecap='round'/></svg>");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      pointer-events: none;
+    }
+    /* 2. サービスアイコン：洗練された線画 SVG に */
+    .services-section .service-icon {
+      width: 56px; height: 56px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0;
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .services-section .service-icon svg {
+      width: 28px; height: 28px;
+      stroke-width: 1.6;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .services-section .service-icon-1 { background: #E8F1FA; }
+    .services-section .service-icon-1 svg { stroke: #2E6090; }
+    .services-section .service-icon-2 { background: #F4ECDF; }
+    .services-section .service-icon-2 svg { stroke: #9A6E2C; }
+    .services-section .service-icon-3 { background: #E5F1ED; }
+    .services-section .service-icon-3 svg { stroke: #2F6B58; }
+    .services-section .service-icon-4 { background: #F1E8EE; }
+    .services-section .service-icon-4 svg { stroke: #7E3858; }
+    /* 3. SNS タイトル（Recommend / Service と同じ調子） */
+    .sns-section .container { display: flex; flex-direction: column; gap: 28px; }
+    .sns-section .sns-head .sec-tag { margin-bottom: 8px; }
+    .sns-section .sns-h2 {
+      font-family: var(--arial);
+      font-size: clamp(28px, 3.5vw, 46px);
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin: 0 0 6px;
+    }
+    .sns-section .sns-h2 em {
+      font-style: normal;
+      color: var(--steel-dark);
+      position: relative;
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+    .sns-section .sns-h2 em::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -2px;
+      height: 8px;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'><path d='M2 6 Q 12 1 22 5 T 42 5 T 62 5 T 82 5 T 102 5 T 118 5' fill='none' stroke='%232E6090' stroke-width='2.5' stroke-linecap='round'/></svg>");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
+    .sns-section .lead-body { color: var(--text-mid); margin-bottom: 8px; }
+    /* 4. トップ画像の文字パネル（テスト用・クラスを外せばオフ） */
+    .hero-text-panel .hero-left {
+      background: rgba(15, 30, 55, 0.55);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      padding: 28px 30px 28px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.22);
+      max-width: 360px;
+      width: fit-content;
+    }
+    .hero-text-panel .hero-h1,
+    .hero-text-panel .hero-sub,
+    .hero-text-panel .hero-kicker,
+    .hero-text-panel .hero-stat-num,
+    .hero-text-panel .hero-stat-label { text-shadow: none; }
+    /* ボックス内の水色を clarity カラーに揃える */
+    .hero-text-panel .hero-kicker { color: #6FB6FF; }
+    .hero-text-panel .hero-sub { color: #BDDDFF; }
+    /* 下部のステッツ行を非表示 */
+    .hero-text-panel .hero-stats { display: none !important; }
+    /* hero-sub の br を無効化して 1 行に */
+    .hero-text-panel .hero-sub br { display: none; }
+    .hero-text-panel .hero-sub br:first-of-type { display: inline; }
+    /* hero-kicker を 1 行に */
+    .hero-text-panel .hero-kicker { color: #6FB6FF; white-space: nowrap; }
+    /* hero-sub：「伝わるビジュアルへ。」で改行、以降は自然折り返し */
+    .hero-text-panel .hero-sub { white-space: normal; }
+    .contact-section .contact-h2 em { font-style: normal; }
+    .contact-section .contact-h2 em::after { display: none !important; content: none !important; background: none !important; }
+    /* Service タイトルを Contact 見出しと同スタイルで */
+    .services-section .lead-h { display: block !important; }
+    /* SNS カード：枠・アイコンを取って埋め込みエリアのみ */
+    .sns-section .sns-card {
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+    }
+    .sns-section .sns-card-header { display: none !important; }
+    /* ヒーロー画像の左半分を 30% 暗く / 右半分を 10% 明るく */
+    .hero .hero-overlay {
+      background:
+        linear-gradient(to right, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.30) 45%, rgba(0,0,0,0) 60%),
+        linear-gradient(to right, rgba(0,0,0,0) 50%, rgba(255,255,255,0.10) 70%, rgba(255,255,255,0.10) 100%),
+        linear-gradient(
+          110deg,
+          rgba(14, 42, 80, 0.62) 0%,
+          rgba(30, 58, 96, 0.40) 50%,
+          rgba(46, 96, 144, 0.14) 100%
+        ) !important;
+    }
+    /* SNS カードのダークヘッダー */
+    .sns-section .sns-card {
+      background: #ffffff !important;
+      border: 1px solid rgba(46,96,144,0.10) !important;
+      border-radius: 14px !important;
+      padding: 0 !important;
+      box-shadow: 0 4px 16px rgba(20,40,63,0.06) !important;
+      overflow: hidden;
+    }
+    .sns-card-banner {
+      background: #1E3A5F;
+      color: #ffffff;
+      padding: 14px 18px 12px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .sns-card-banner-title {
+      font-family: var(--arial), 'Hiragino Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: #ffffff;
+    }
+    .sns-card-banner-sub {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #B8D8F5;
+    }
+    .sns-section .sns-embed-area {
+      flex: 1;
+      background: var(--white);
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 18px 18px 22px !important;
+      min-height: 220px;
+      text-align: left;
+      color: var(--text-mid);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    /* 作品タイトルを他セクション見出しと同じフォントに */
+    .showcase-title {
+      font-family: var(--arial), 'Hiragino Sans', sans-serif !important;
+      font-weight: 700 !important;
+      font-style: normal !important;
+      letter-spacing: 0.01em;
+    }
+    /* Hero を 15% 明るく */
+    .hero .hero-overlay {
+      background:
+        linear-gradient(to right, rgba(30,65,118,0.38) 0%, rgba(30,65,118,0.38) 45%, rgba(30,65,118,0) 60%),
+        linear-gradient(to right, rgba(255,255,255,0) 50%, rgba(255,255,255,0.29) 70%, rgba(255,255,255,0.29) 100%),
+        linear-gradient(
+          110deg,
+          rgba(22, 63, 125, 0.52) 0%,
+          rgba(52, 103, 157, 0.22) 50%,
+          rgba(135, 182, 220, 0.05) 100%
+        ) !important;
+    }
+    .hero .hero-slides { filter: brightness(1.25); }
+    /* モバイル：グラデーション幅を1.5倍に拡張 */
+    @media (max-width: 768px) {
+      .hero .hero-overlay {
+        background:
+          linear-gradient(to right, rgba(30,65,118,0.38) 0%, rgba(30,65,118,0.38) 68%, rgba(30,65,118,0) 90%),
+          linear-gradient(to right, rgba(255,255,255,0) 75%, rgba(255,255,255,0.29) 90%, rgba(255,255,255,0.29) 100%),
+          linear-gradient(
+            110deg,
+            rgba(22, 63, 125, 0.52) 0%,
+            rgba(52, 103, 157, 0.22) 75%,
+            rgba(135, 182, 220, 0.05) 100%
+          ) !important;
+      }
+    }
+    /* Contact: カレンダーとフォームを同高に */
+    .contact-section .contact-layout { align-items: stretch; }
+    .contact-section .contact-left,
+    .contact-section .contact-right { display: flex; flex-direction: column; }
+    .contact-section .cal-wrap { flex: 1; display: flex; flex-direction: column; margin-bottom: 0 !important; }
+    .contact-section .cal-wrap .cal-body { flex: 1; }
+    .contact-section .form-card { flex: 1; display: flex; flex-direction: column; }
+    .contact-section .form-card .form-body { flex: 1; display: flex; flex-direction: column; }
+    .contact-section .nl-box { margin-top: 22px; }
+    /* Contact: リードカード */
+    .contact-intro {
+      background: #ffffff;
+      border: 1px solid rgba(46,96,144,0.10);
+      border-radius: 16px;
+      padding: 24px 26px;
+      margin: 4px 0 32px;
+      box-shadow: 0 4px 16px rgba(20,40,63,0.05);
+      border-left: 4px solid var(--maroon);
+    }
+    .contact-intro-title {
+      font-family: var(--arial), 'Hiragino Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--steel-dark);
+      margin: 0 0 10px;
+      line-height: 1.4;
+    }
+    .contact-intro-body {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-mid);
+      line-height: 1.95;
+      margin: 0;
+    }
+    /* ナビ SNS アイコンを水色（元の steel）に戻す */
+    .nav .nav-social-link { color: var(--steel); }
+    .nav .nav-social-link:hover { color: var(--steel-dark); }
+    /* EN リンクと More ボタンを一旦非表示（英語ページ／一覧ページができたら復活） */
+    .nav-lang { display: none !important; }
+    .recommend-section .more-link,
+    .works-section .more-link { display: none !important; }
+    /* Works: showcase を一回り小さく */
+    .works-section .showcase-outer {
+      width: min(62%, 760px);
+      aspect-ratio: 16/11;
+    }
+    @media (max-width: 900px) {
+      .works-section .showcase-outer { width: 88%; aspect-ratio: 4/3; }
+    }
+    /* ヒーローの clarity を水色（やや白め）に */
+    .hero-h1 em {
+      color: #B8D8F5;
+      text-shadow: 0 1px 8px rgba(0,30,80,0.55), 0 0 28px rgba(120,180,240,0.35);
+    }
+    .hero-h1 em::after {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'><path d='M2 6 Q 12 1 22 5 T 42 5 T 62 5 T 82 5 T 102 5 T 118 5' fill='none' stroke='%23B8D8F5' stroke-width='2.5' stroke-linecap='round'/></svg>");
+    }
+    /* hero-kicker と btn-outline の青も同系の水色に */
+    .hero .hero-kicker { color: #B8D8F5 !important; }
+    .hero .hero-kicker::before { background: #B8D8F5 !important; }
+    /* Works を見るボタン：マルーンと並ぶダークブルー × 白抜き */
+    .hero .btn-outline {
+      color: #ffffff !important;
+      border: none !important;
+      background: #1E3A5F !important;
+      box-shadow: 0 4px 0 #14283F, 0 10px 22px rgba(20,40,63,0.35);
+    }
+    .hero .btn-outline:hover {
+      background: #16304E !important;
+      color: #ffffff !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #14283F, 0 12px 26px rgba(20,40,63,0.42);
+    }
+    /* hero-stats（200+ ～ 神戸）を非表示 */
+    .hero .hero-stats { display: none !important; }
+    /* hero-dots を白塗りに */
+    .hero .hero-dot { background: rgba(255,255,255,0.55) !important; border-color: rgba(255,255,255,0.55) !important; }
+    .hero .hero-dot.active { background: #ffffff !important; border-color: #ffffff !important; }
+    /* hero-stat-num の色も同系に */
+    .hero .hero-stat-num { color: #B8D8F5 !important; }
+    /* モバイルで Newsletter を最後に */
+    @media (max-width: 900px) {
+      .contact-layout {
+        display: flex !important;
+        flex-direction: column;
+        gap: 32px;
+      }
+      .contact-left { display: contents; }
+      .contact-left > .contact-h2 { order: 1; }
+      .contact-left > .contact-desc { order: 2; }
+      .contact-left > .cal-wrap { order: 3; }
+      .contact-right { order: 4; }
+      .contact-left > .nl-box { order: 5; }
+    }
+  </style>
 </head>
 <body>
 
@@ -29,13 +600,13 @@
       <a href="index_en.html" class="nav-link nav-lang" title="English Page">EN</a>
       <a href="#contact"   class="nav-cta">Contact →</a>
       <div class="nav-socials">
-        <a href="#" class="nav-social-link" aria-label="Instagram">
+        <a href="https://www.instagram.com/smachet777" target="_blank" rel="noopener" class="nav-social-link" aria-label="Instagram">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
         </a>
         <a href="#" class="nav-social-link" aria-label="YouTube">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29.1 29.1 0 0 0 1 12a29.1 29.1 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29.1 29.1 0 0 0 23 12a29.1 29.1 0 0 0-.46-5.58zM9.75 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>
         </a>
-        <a href="#" class="nav-social-link" aria-label="LinkedIn">
+        <a href="https://www.linkedin.com/in/kanna-yoshikawa-39741422b/" target="_blank" rel="noopener" class="nav-social-link" aria-label="LinkedIn">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
         </a>
       </div>
@@ -98,8 +669,10 @@
   <div class="mission-inner anim-in">
     <img src="images/logo_trans.png" alt="Blue Bee Ink" class="mission-bee">
     <div class="mission-text-col">
-      <h2 class="mission-h2"><span>Blue Bee Ink</span> という名前の由来</h2>
-      <p class="mission-body">「青い蜂」は幸運の象徴。ミツバチはランダムに飛んでいるように見えて、実はとても目的を持って動き、飛ぶ先々で花粉を運び、新しい命をつなぎます。グラフィックレコーディングも、それと同じ。会議やイベントのエッセンスをすくい取り、アイデアを組織のあちこちへ届け、広げていく力を持っています。良いコミュニケーションと大切な場の体験を、グラフィックの力で残す——ビジュアル記録を通じて、あなたのビジネスに幸運を呼び込みましょう。</p>
+      <h2 class="mission-h2"><span>グラフィックレコーディングとは？</span></h2>
+      <p class="mission-body">会議やイベントの内容をその場でリアルタイムにイラストや文字で「見える化」していく仕事です。図や絵でまとめるので、話の流れや大事なポイントがひと目でわかります。</p>
+      <h2 class="mission-h2" style="margin-top:28px;"><span>Blue Bee Inkって？</span></h2>
+      <p class="mission-body">活動名「Blue Bee Ink」には、花粉を運んで命をつなぐ蜂のように、場のエッセンスをすくい取ってアイデアを広げていきたいという想いを込めています。Blue Bee＝青い蜂は幸運の象徴でもあり、Ink＝インクはグラフィックレコーダーの道具であるペンとマーカーを表しています。</p>
     </div>
   </div>
 </section>
@@ -110,17 +683,18 @@
     <div class="about-layout">
       <div class="anim-in">
         <div class="sec-tag"><span class="tag-dot"></span>About me</div>
-        <h2 class="about-h2">吉川観奈 <span class="hand-script">Kanna</span></h2>
+        <h2 class="about-h2">吉川観奈 <span class="hand-script">Kanna Yoshikawa</span></h2>
         <p class="about-title">Graphic Recorder · Blue Bee Ink · Kobe, Japan</p>
         <p class="about-body">
           外資系製薬企業での経験を活かし、神戸を拠点にヘルスケア・多様性・バイリンガルに特化したグラフィックレコーディングを提供しています。医療・製薬分野の専門知識と、日英バイリンガルの強みを生かしたビジュアル制作が得意です。アニメーション制作にも力を入れ、SNSで広がるコンテンツも手がけています。
         </p>
-        <div class="skill-row">
-          <span class="skill-tag hl">Healthcare</span>
-          <span class="skill-tag">Diversity &amp; Inclusion</span>
-          <span class="skill-tag hl">Bilingual 日/EN</span>
-          <span class="skill-tag">Animation</span>
-          <span class="skill-tag">Pharma Industry</span>
+        <div class="about-affiliations">
+          <h3 class="affiliations-title">所属・活動</h3>
+          <ul class="affiliations-list">
+            <li>「Blue Bee Ink」主宰。</li>
+            <li>ドイツ発のグラフィックレコーディング用マーカーブランド「Neuland」の<button type="button" class="affiliation-link" onclick="openAffiliationModal('neuland')">公認アンバサダー<span class="affiliation-link-arrow" aria-hidden="true">↗</span></button>に選出される。</li>
+            <li>グラフィックレコーディングの国際団体IFVP（International Forum of Visual Practitioners）の<button type="button" class="affiliation-link" onclick="openAffiliationModal('ifvp')">ボードメンバー（理事）<span class="affiliation-link-arrow" aria-hidden="true">↗</span></button>を務める。</li>
+          </ul>
         </div>
       </div>
       <div class="about-photo-col anim-in" style="transition-delay:.12s">
@@ -133,34 +707,56 @@
   </div>
 </section>
 
-<!-- ── ROLES ── -->
-<section class="roles-section">
-  <div class="container">
-    <div class="roles-grid">
-      <div class="role-card anim-in" style="transition-delay:.06s">
-        <div class="role-logo">✏️</div>
-        <div class="role-body">
-          <span class="role-badge">2026 – 2027</span>
-          <div class="role-title">Neuland Ambassador</div>
-          <div class="role-org">Neuland GmbH &amp; Co. KG（ドイツ）</div>
-          <p class="role-period">グラフィックレコーディング用マーカーの世界的ブランド、ノイランドのアンバサダーとして活動。ビジュアルファシリテーションの普及に貢献します。</p>
-          <img src="images/ambassador.jpg" alt="Neuland Ambassador認定証" class="role-ambassador-img" onclick="openImageLightbox('images/ambassador.jpg','Neuland Ambassador 認定証')" onerror="this.style.display='none'">
-          <a href="https://www.neuland.com/en/pages/ambassadors" target="_blank" rel="noopener" class="role-link">Neuland Ambassadors →</a>
-        </div>
-      </div>
-      <div class="role-card anim-in" style="transition-delay:.12s">
-        <div class="role-logo" style="background:#EBF3FB;">🌐</div>
-        <div class="role-body">
-          <span class="role-badge">2026 – 2028</span>
-          <div class="role-title">Board Member</div>
-          <div class="role-org">IFVP — International Forum of Visual Practitioners</div>
-          <p class="role-period">ビジュアルプラクティショナーの国際組織 IFVPのボードメンバーとして、グラフィックレコーディングの国際的な発展に貢献します。</p>
-          <a href="https://www.ifvp.org/users/kannapple555-gmail-com" target="_blank" rel="noopener" class="role-link">IFVPプロフィール →</a>
-        </div>
-      </div>
-    </div>
+<!-- ── AFFILIATION MODAL ── -->
+<div class="affiliation-modal" id="affiliation-modal" onclick="closeAffiliationModal()">
+  <div class="affiliation-modal-inner" onclick="event.stopPropagation()">
+    <button type="button" class="affiliation-modal-close" onclick="closeAffiliationModal()" aria-label="閉じる">✕</button>
+    <div class="affiliation-modal-body" id="affiliation-modal-body"></div>
   </div>
-</section>
+</div>
+
+<script>
+  const AFFILIATION_DATA = {
+    neuland: {
+      badge: '2026 – 2027',
+      title: 'Neuland Ambassador',
+      org: 'Neuland GmbH &amp; Co. KG（ドイツ）',
+      body: 'グラフィックレコーディング用マーカーの世界的ブランド、ノイランドのアンバサダーとして活動。ビジュアルファシリテーションの普及に貢献します。',
+      image: 'images/ambassador.jpg',
+      imageAlt: 'Neuland Ambassador 認定証',
+      link: { href: 'https://www.neuland.com/en/pages/ambassadors', label: 'Neuland Ambassadors →' }
+    },
+    ifvp: {
+      badge: '2026 – 2028',
+      title: 'Board Member',
+      org: 'IFVP — International Forum of Visual Practitioners',
+      body: 'ビジュアルプラクティショナーの国際組織 IFVPのボードメンバーとして、グラフィックレコーディングの国際的な発展に貢献します。',
+      link: { href: 'https://www.ifvp.org/users/kannapple555-gmail-com', label: 'IFVPプロフィール →' }
+    }
+  };
+  function openAffiliationModal(key) {
+    const d = AFFILIATION_DATA[key];
+    if (!d) return;
+    const body = document.getElementById('affiliation-modal-body');
+    body.innerHTML = `
+      <span class="affiliation-modal-badge">${d.badge}</span>
+      <h3 class="affiliation-modal-title">${d.title}</h3>
+      <div class="affiliation-modal-org">${d.org}</div>
+      <p class="affiliation-modal-text">${d.body}</p>
+      ${d.image ? `<img src="${d.image}" alt="${d.imageAlt || ''}" class="affiliation-modal-img" onclick="openImageLightbox('${d.image}','${d.imageAlt || ''}')" onerror="this.style.display='none'">` : ''}
+      ${d.link ? `<a href="${d.link.href}" target="_blank" rel="noopener" class="affiliation-modal-link">${d.link.label}</a>` : ''}
+    `;
+    document.getElementById('affiliation-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeAffiliationModal() {
+    document.getElementById('affiliation-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeAffiliationModal();
+  });
+</script>
 
 <div class="wave" style="background:var(--off-white);">
   <svg viewBox="0 0 1200 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="48">
@@ -172,10 +768,10 @@
 <section id="recommend" class="recommend-section" style="position:relative;">
   <div class="recommend-head">
     <div>
-      <div class="sec-tag" style="color:#7AAED4;"><span class="tag-dot" style="border-color:#7AAED4;background:#800000;"></span>Client Voices</div>
+      <div class="sec-tag" style="color:#7AAED4;"><span class="tag-dot" style="border-color:#7AAED4;background:#800000;"></span>Recommend</div>
       <h2 class="recommend-h2">お客さまの声と<br><em>推薦のことば</em></h2>
+      <p class="lead-body">実際にご依頼いただいた方や、グラフィックレコーディング関係者から<br>いただいた推薦コメントをご紹介します。</p>
     </div>
-    <p class="recommend-sub">実際にご依頼いただいた方や、グラフィックレコーディング関係者からいただいた推薦コメントをご紹介します。</p>
     <a href="#" class="more-link" style="color:#7AAED4;border-color:#7AAED4;">More →</a>
   </div>
   <div class="marquee-section">
@@ -203,14 +799,14 @@
 <section id="service" class="section services-section">
   <div class="container">
     <div class="anim-in">
-      <div class="sec-tag"><span class="tag-dot"></span>Services</div>
-      <h2 class="services-h2">こんな場面で<br>お役に立てます — <em>4つの専門領域</em></h2>
+      <div class="sec-tag"><span class="tag-dot"></span>Service</div>
+      <h2 class="lead-h">4つの<span class="wavy">専門領域</span></h2>
     </div>
     <div class="services-grid" style="margin-top:40px;">
-      <div class="service-card anim-in"><div class="service-icon service-icon-1">🏥</div><div class="service-name">Healthcare</div><div class="service-desc">製薬・医療・ヘルスケア分野の専門知識で、複雑な内容もわかりやすいビジュアルに。外資系製薬企業出身のバックグラウンドを活かします。</div></div>
-      <div class="service-card anim-in" style="transition-delay:0.08s"><div class="service-icon service-icon-2">🌈</div><div class="service-name">Inclusion</div><div class="service-desc">多様性・インクルージョンをテーマにしたワークショップやカンファレンスで、あらゆる声を丁寧にビジュアル化します。</div></div>
-      <div class="service-card anim-in" style="transition-delay:0.16s"><div class="service-icon service-icon-3">🌐</div><div class="service-name">English</div><div class="service-desc">日英バイリンガル対応で、国際会議や外資系企業のミーティングもシームレスにサポートします。</div></div>
-      <div class="service-card anim-in" style="transition-delay:0.24s"><div class="service-icon service-icon-4">✨</div><div class="service-name">Animation</div><div class="service-desc">グラレコをそのままアニメーションに。SNSで広がるモーションコンテンツとして情報の届く力を高めます。</div></div>
+      <div class="service-card anim-in"><div class="service-icon service-icon-1"><svg viewBox="0 0 32 32"><path d="M16 27c-5-3.5-9-7.2-9-12a5.2 5.2 0 0 1 9-3.5A5.2 5.2 0 0 1 25 15c0 4.8-4 8.5-9 12Z"/><path d="M16 14v6M13 17h6"/></svg></div><div class="service-name">Healthcare</div><div class="service-desc">製薬・医療・ヘルスケア分野の専門知識で、複雑な内容もわかりやすいビジュアルに。外資系製薬企業出身のバックグラウンドを活かします。</div></div>
+      <div class="service-card anim-in" style="transition-delay:0.08s"><div class="service-icon service-icon-2"><svg viewBox="0 0 32 32"><circle cx="11" cy="13" r="3.5"/><circle cx="21" cy="13" r="3.5"/><circle cx="16" cy="21" r="3.5"/><path d="M13.5 15.5 14.5 18.5M18.5 15.5 17.5 18.5M14.4 13 17.6 13"/></svg></div><div class="service-name">Inclusion</div><div class="service-desc">多様性・インクルージョンをテーマにしたワークショップやカンファレンスで、あらゆる声を丁寧にビジュアル化します。</div></div>
+      <div class="service-card anim-in" style="transition-delay:0.16s"><div class="service-icon service-icon-3"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11"/><path d="M5 16h22M16 5a18 18 0 0 1 0 22M16 5a18 18 0 0 0 0 22"/><path d="M7 11c2 1.4 5 2.4 9 2.4S23 12.4 25 11M7 21c2-1.4 5-2.4 9-2.4S23 19.6 25 21"/></svg></div><div class="service-name">English</div><div class="service-desc">日英バイリンガル対応で、国際会議や外資系企業のミーティングもシームレスにサポートします。</div></div>
+      <div class="service-card anim-in" style="transition-delay:0.24s"><div class="service-icon service-icon-4"><svg viewBox="0 0 32 32"><rect x="4" y="8" width="20" height="14" rx="2.5"/><path d="M24 12.5 28.5 9.5v11L24 17.5" stroke-linejoin="round"/><path d="M9 15l4 2.5L9 20zM9 15v5" stroke-linejoin="round"/></svg></div><div class="service-name">Animation</div><div class="service-desc">グラレコをそのままアニメーションに。SNSで広がるモーションコンテンツとして情報の届く力を高めます。</div></div>
     </div>
   </div>
 </section>
@@ -224,14 +820,25 @@
 <!-- ── SNS ── -->
 <section class="sns-section">
   <div class="container">
+    <div class="sns-head anim-in">
+      <div class="sec-tag"><span class="tag-dot"></span>SNS</div>
+    </div>
     <div class="sns-grid">
       <div class="sns-card anim-in" style="transition-delay:.06s">
-        <div class="sns-card-header"><div class="sns-card-icon">📸</div><div class="sns-card-name">Instagram</div></div>
-        <div class="sns-embed-area" id="instagram-embed">📸 Instagramの埋め込みコードをここに追加できます</div>
+        <div class="sns-card-banner">
+          <div class="sns-card-banner-title">Instagram</div>
+          <div class="sns-card-banner-sub">Latest Posts</div>
+        </div>
+        <div class="sns-embed-area" id="instagram-embed">埋め込みコードをここに追加</div>
       </div>
       <div class="sns-card anim-in" style="transition-delay:.12s">
-        <div class="sns-card-header"><div class="sns-card-icon" style="background:#FFF8E8;">📝</div><div class="sns-card-name">note</div></div>
-        <div class="sns-embed-area" id="note-embed">📝 noteの埋め込みコードをここに追加できます</div>
+        <div class="sns-card-banner">
+          <div class="sns-card-banner-title">note</div>
+          <div class="sns-card-banner-sub">Latest Articles</div>
+        </div>
+        <div class="sns-embed-area" id="note-embed">
+          <div id="note-widget"><div class="note-loading">読み込み中...</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -249,7 +856,8 @@
     <div class="works-header">
       <div>
         <div class="sec-tag"><span class="tag-dot"></span>Works</div>
-        <h2 class="works-h2">実績・作品</h2>
+        <h2 class="works-title">実績・作品</h2>
+        <p class="lead-body">過去の作品やアニメーションをご紹介します。</p>
       </div>
       <a href="#" class="more-link">More →</a>
     </div>
@@ -259,6 +867,7 @@
       <button class="pill"        data-filter="diversity" onclick="setFilter(this,'diversity')">Inclusion</button>
       <button class="pill"        data-filter="animation" onclick="setFilter(this,'animation')">Animation</button>
       <button class="pill"        data-filter="bilingual" onclick="setFilter(this,'bilingual')">Bilingual</button>
+      <button class="pill"        data-filter="leaflet"   onclick="setFilter(this,'leaflet')">Leaflet</button>
     </div>
   </div>
   <div class="showcase-outer" id="showcase-outer">
@@ -285,10 +894,13 @@
 <section id="contact" class="section contact-section">
   <div class="container">
     <div class="sec-tag"><span class="tag-dot"></span>Contact</div>
+    <h2 class="contact-h2" style="margin-bottom:16px;"><em>お問い合わせ</em></h2>
+    <div class="contact-intro anim-in">
+      <h3 class="contact-intro-title">お仕事のご依頼について</h3>
+      <p class="contact-intro-body">会議の記録としてのグラフィックレコーディングだけでなく、リーフレット・小冊子・研修用イラスト、アニメーションなど、「絵と文字で伝える」お仕事ならなんでもご相談ください。ご相談・ご依頼は下記のフォームからお気軽にどうぞ。オンラインでのご相談をご希望の方は、カレンダーで空き日程をご確認のうえ、ご希望の日時をフォームにてお知らせください。</p>
+    </div>
     <div class="contact-layout">
       <div class="contact-left">
-        <h2 class="contact-h2">ご依頼・<em>お問い合わせ</em></h2>
-        <p class="contact-desc">ご依頼や打ち合わせのご相談はお気軽に。<br>赤い日付が対応可能な日程です。</p>
         <div class="cal-wrap">
           <div class="cal-head">
             <div class="cal-head-left">
@@ -343,17 +955,17 @@
             <div class="form-field"><label class="form-label">ご依頼の種類 <span class="form-req">*</span></label>
               <select class="form-select">
                 <option value="">選択してください</option>
-                <option value="medical">Healthcare（医療・ヘルスケア）</option>
-                <option value="diversity">Inclusion（多様性・インクルージョン）</option>
-                <option value="english">English（日英バイリンガル）</option>
-                <option value="animation">Animation（SNSアニメーション）</option>
+                <option value="grec-jp">グラフィックレコーディング（日本語）</option>
+                <option value="grec-en">Graphic Recording (English)</option>
+                <option value="sns">SNS配信用ビジュアルコンテンツ</option>
+                <option value="leaflet">リーフレット</option>
                 <option value="other">その他</option>
               </select>
             </div>
-            <div class="form-field"><label class="form-label">ご希望の時期</label><input class="form-input" type="text" placeholder="例：2025年6月ごろ"></div>
+            <div class="form-field"><label class="form-label">ご希望の時期</label><input class="form-input" type="text" placeholder="例：2026年6月ごろ"></div>
             <div class="form-field"><label class="form-label">ご依頼内容・ご質問</label><textarea class="form-textarea" placeholder="イベントの概要、参加人数、言語（日本語／英語）などをお聞かせください。"></textarea></div>
             <button class="btn-submit">送信する →</button>
-            <p class="form-note">※ 送信後、2営業日以内にご返信いたします。<br>メールでのお問い合わせは <a href="mailto:hello@bluebeeink.com">hello@bluebeeink.com</a></p>
+            <p class="form-note">※ 送信後、2営業日以内にご返信いたします。<br>メールでのお問い合わせは <a href="mailto:bluebee.ink55@gmail.com">bluebee.ink55@gmail.com</a></p>
           </div>
         </div>
       </div>
@@ -381,13 +993,13 @@
         <div class="footer-nav-group">
           <h4>Contact</h4>
           <a href="#contact">お問い合わせ</a>
-          <a href="mailto:hello@bluebeeink.com">hello@bluebeeink.com</a>
+          <a href="mailto:bluebee.ink55@gmail.com">bluebee.ink55@gmail.com</a>
           <a href="#">プライバシーポリシー</a>
         </div>
       </nav>
     </div>
     <div class="footer-bottom">
-      <p class="footer-copy">© 2025 吉川観奈 · Kobe, Japan</p>
+      <p class="footer-copy">© 2026 吉川観奈 · Kobe, Japan</p>
       <div class="footer-social">
         <a href="#">Instagram</a>
         <a href="#">YouTube</a>
@@ -397,6 +1009,7 @@
   </div>
 </footer>
 
-<script src="app.js"></script>
+<script src="app4.js"></script>
+<script src="note-widget.js"></script>
 </body>
 </html>
