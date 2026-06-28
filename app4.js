@@ -321,8 +321,8 @@ applyFilter();
 ══════════════════════════════════════ */
 const GCAL_CONFIG = {
   APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyi-fRybVHUcp-R5n-agJ5ykfZ2J2mm41O4n5Od49-EgWlVQHsIFwRxJ4BYhW2dQ08/exec',
-  SHOW_EVENT_TITLES: false,
-  CACHE_TTL_MS: 60 * 60 * 1000,
+  SHOW_EVENT_TITLES: true,
+  CACHE_TTL_MS: 0,
 };
 
 let calYear  = new Date().getFullYear();
@@ -332,10 +332,11 @@ let calLoading = false;
 let selectedDate = null;
 
 function getCalendarCacheKey(year, month) {
-  return `site-calendar:${year}-${String(month).padStart(2,'0')}`;
+  return `site-calendar:${GCAL_CONFIG.APPS_SCRIPT_URL}:${year}-${String(month).padStart(2,'0')}`;
 }
 
 function getCachedEvents(year, month) {
+  if (GCAL_CONFIG.CACHE_TTL_MS <= 0) return null;
   const key = getCalendarCacheKey(year, month);
   const memoryCache = calEventCache[key];
   const now = Date.now();
@@ -357,6 +358,7 @@ function getCachedEvents(year, month) {
 }
 
 function setCachedEvents(year, month, events) {
+  if (GCAL_CONFIG.CACHE_TTL_MS <= 0) return;
   const key = getCalendarCacheKey(year, month);
   const payload = { cachedAt: Date.now(), events };
   calEventCache[key] = payload;
@@ -445,6 +447,17 @@ function getDemoEvents(year, month) {
   return byDate;
 }
 
+function formatCalendarTimeLabel(ev) {
+  if (!ev || ev.allDay || !ev.start) return '終日';
+  const start = new Date(ev.start);
+  const end = ev.end ? new Date(ev.end) : null;
+  if (Number.isNaN(start.getTime())) return '予定あり';
+  const startText = start.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
+  if (!end || Number.isNaN(end.getTime())) return startText;
+  const endText = end.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
+  return `${startText}-${endText}`;
+}
+
 async function renderCalendar(year, month) {
   if (calLoading) return;
   calLoading = true;
@@ -488,8 +501,22 @@ async function renderCalendar(year, month) {
     if (isToday) cls += isBusy?' cal-today cal-busy':' cal-today cal-avail';
     else         cls += isBusy?' cal-busy':' cal-avail';
     if (dateStr===selectedDate) cls+=' cal-selected';
-    cell.className = cls; cell.textContent = d;
-    if (events.length>0) { const b=document.createElement('div'); b.className='cal-event-badge'; cell.appendChild(b); }
+    cell.className = cls;
+    const dayNum = document.createElement('span');
+    dayNum.className = 'cal-day-num';
+    dayNum.textContent = d;
+    cell.appendChild(dayNum);
+    if (events.length>0) {
+      const b=document.createElement('div');
+      b.className='cal-event-badge';
+      cell.appendChild(b);
+      const time=document.createElement('span');
+      time.className='cal-time-label';
+      time.textContent = events.length > 1
+        ? `${formatCalendarTimeLabel(events[0])} 他${events.length - 1}`
+        : formatCalendarTimeLabel(events[0]);
+      cell.appendChild(time);
+    }
     if (!isBusy) {
       cell.addEventListener('click', () => {
         selectedDate = dateStr;
@@ -519,9 +546,7 @@ function showEventDetail(dateStr, events) {
   document.getElementById('cal-event-date').textContent =
     `${d.getMonth()+1}月${d.getDate()}日（${'日月火水木金土'[d.getDay()]}）`;
   document.getElementById('cal-event-list').innerHTML = events.map(ev => {
-    const t = ev.allDay ? '終日' :
-      (ev.start ? new Date(ev.start).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'})
-       +' – '+new Date(ev.end).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}) : '');
+    const t = formatCalendarTimeLabel(ev).replace('-', ' – ');
     return `<div class="cal-event-item"><div class="cal-event-dot" style="background:#a0aab4;"></div><div><div class="cal-event-name">${ev.title}</div><div class="cal-event-time">${t}</div></div></div>`;
   }).join('');
   panel.style.display = 'block';
