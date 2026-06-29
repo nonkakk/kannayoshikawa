@@ -1324,6 +1324,17 @@ video.showcase-bg { object-fit: contain; }
 }
 .btn-submit:hover { background: #600000; transform: translateY(-2px); box-shadow: 0 6px 0 #5e0000, 0 10px 22px rgba(128,0,0,0.38); }
 .btn-submit:active { transform: translateY(2px); box-shadow: 0 1px 0 #5e0000, 0 4px 10px rgba(128,0,0,0.28); }
+.btn-submit:disabled { cursor: wait; opacity: 0.72; transform: none; box-shadow: 0 2px 0 #5e0000, 0 4px 12px rgba(128,0,0,0.2); }
+.form-status {
+  min-height: 20px;
+  margin: 12px 0 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+.form-status.is-success { color: #2f7551; }
+.form-status.is-error { color: var(--maroon); }
 .form-note { font-size: 11px; color: var(--grey-mid); text-align: center; margin-top: 12px; line-height: 1.65; font-weight: 500; }
 .form-note a { color: var(--steel-dark); text-decoration: underline; }
 

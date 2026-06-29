@@ -14,6 +14,133 @@ window.addEventListener('scroll', () => {
 function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
 function closeMenu()  { document.getElementById('mobile-menu').classList.remove('open'); }
 
+/* ── Contact form → Google Forms ── */
+const GOOGLE_FORM_CONFIG = {
+  FORM_ACTION_URL: 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSd4bzibmxDbhs03kT7852twEr8Q2s_v2X55eXbfuyZjYsUTpQ/formResponse',
+  ENTRIES: {
+    name: 'entry.236996633',
+    company: 'entry.100015974',
+    email: 'entry.1808168783',
+    service: 'entry.2080477961',
+    period: 'entry.740428173',
+    message: 'entry.2016539096'
+  },
+  HIDDEN_FIELDS: {
+    fvv: '1',
+    partialResponse: '[null,null,"5895922779701442006"]',
+    pageHistory: '0',
+    fbzx: '5895922779701442006',
+    submissionTimestamp: '-1'
+  }
+};
+
+function isGoogleFormConfigured() {
+  return GOOGLE_FORM_CONFIG.FORM_ACTION_URL.includes('formResponse') &&
+    Object.values(GOOGLE_FORM_CONFIG.ENTRIES).every(id => /^entry\.\d+$/.test(id));
+}
+
+function setContactFormStatus(message, type) {
+  const status = document.getElementById('contact-form-status');
+  if (!status) return;
+  status.textContent = message;
+  status.className = `form-status ${type ? 'is-' + type : ''}`;
+}
+
+function buildGoogleFormPayload(form) {
+  const formData = new FormData(form);
+  const payload = {};
+  Object.entries(GOOGLE_FORM_CONFIG.ENTRIES).forEach(([fieldName, entryId]) => {
+    payload[entryId] = formData.get(fieldName) || '';
+  });
+  Object.assign(payload, GOOGLE_FORM_CONFIG.HIDDEN_FIELDS);
+  return payload;
+}
+
+function submitGoogleForm(payload) {
+  return new Promise((resolve, reject) => {
+    const frameName = `google-form-submit-${Date.now()}`;
+    const iframe = document.createElement('iframe');
+    iframe.name = frameName;
+    iframe.style.display = 'none';
+
+    const googleForm = document.createElement('form');
+    googleForm.action = GOOGLE_FORM_CONFIG.FORM_ACTION_URL;
+    googleForm.method = 'POST';
+    googleForm.target = frameName;
+    googleForm.style.display = 'none';
+
+    Object.entries(payload).forEach(([name, value]) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = name;
+      input.value = value;
+      googleForm.appendChild(input);
+    });
+
+    const cleanup = () => {
+      googleForm.remove();
+      iframe.remove();
+    };
+    const timeout = window.setTimeout(() => {
+      cleanup();
+      reject(new Error('Googleフォームへの送信がタイムアウトしました。'));
+    }, 10000);
+
+    iframe.addEventListener('load', () => {
+      window.clearTimeout(timeout);
+      cleanup();
+      resolve();
+    }, { once: true });
+
+    document.body.appendChild(iframe);
+    document.body.appendChild(googleForm);
+    googleForm.submit();
+  });
+}
+
+function initContactForm() {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      setContactFormStatus('必須項目を入力してください。', 'error');
+      return;
+    }
+    if (!isGoogleFormConfigured()) {
+      setContactFormStatus('Googleフォーム連携の設定が未完了です。フォームURLとentry IDを設定してください。', 'error');
+      return;
+    }
+
+    const submitButton = form.querySelector('.btn-submit');
+    const originalText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = '送信中...';
+    setContactFormStatus('', '');
+
+    try {
+      await submitGoogleForm(buildGoogleFormPayload(form));
+      form.reset();
+      setContactFormStatus('送信しました。お問い合わせありがとうございます。', 'success');
+    } catch (error) {
+      setContactFormStatus('送信できませんでした。時間をおいて再度お試しください。', 'error');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = originalText;
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded', initContactForm);
+
+function fillContactPeriodFromDate(dateStr) {
+  const periodInput = document.getElementById('contact-period');
+  if (!periodInput || periodInput.value.trim()) return;
+  const d = new Date(dateStr + 'T00:00:00');
+  periodInput.value = `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日ごろ`;
+}
+
 /* ── Scroll-in animation ── */
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
@@ -522,6 +649,7 @@ async function renderCalendar(year, month) {
         selectedDate = dateStr;
         document.querySelectorAll('.cal-cell').forEach(c=>c.classList.remove('cal-selected'));
         cell.classList.add('cal-selected');
+        fillContactPeriodFromDate(dateStr);
         document.getElementById('cal-event-detail').style.display='none';
         document.querySelector('.contact-right').scrollIntoView({behavior:'smooth',block:'center'});
       });
