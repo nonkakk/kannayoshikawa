@@ -30,6 +30,7 @@ const GOOGLE_FORM_CONFIG = {
     partialResponse: '[null,null,"5895922779701442006"]',
     pageHistory: '0',
     fbzx: '5895922779701442006',
+    hud: 'true',
     submissionTimestamp: '-1'
   }
 };
@@ -53,7 +54,43 @@ function buildGoogleFormPayload(form) {
     payload[entryId] = formData.get(fieldName) || '';
   });
   Object.assign(payload, GOOGLE_FORM_CONFIG.HIDDEN_FIELDS);
+  payload.dlut = String(Date.now());
   return payload;
+}
+
+function showContactPopup(title, message, type) {
+  let popup = document.getElementById('contact-popup');
+  if (!popup) {
+    popup = document.createElement('div');
+    popup.id = 'contact-popup';
+    popup.className = 'contact-popup';
+    popup.setAttribute('role', 'dialog');
+    popup.setAttribute('aria-modal', 'true');
+    popup.innerHTML = `
+      <div class="contact-popup-panel">
+        <button class="contact-popup-close" type="button" aria-label="閉じる">×</button>
+        <div class="contact-popup-icon" aria-hidden="true"></div>
+        <h3 class="contact-popup-title"></h3>
+        <p class="contact-popup-message"></p>
+        <button class="contact-popup-ok" type="button">OK</button>
+      </div>
+    `;
+    document.body.appendChild(popup);
+    popup.addEventListener('click', (event) => {
+      if (
+        event.target === popup ||
+        event.target.closest('.contact-popup-close') ||
+        event.target.closest('.contact-popup-ok')
+      ) {
+        popup.classList.remove('is-open');
+      }
+    });
+  }
+
+  popup.className = `contact-popup is-${type || 'success'}`;
+  popup.querySelector('.contact-popup-title').textContent = title;
+  popup.querySelector('.contact-popup-message').textContent = message;
+  window.setTimeout(() => popup.classList.add('is-open'), 0);
 }
 
 function submitGoogleForm(payload) {
@@ -123,9 +160,13 @@ function initContactForm() {
     try {
       await submitGoogleForm(buildGoogleFormPayload(form));
       form.reset();
+      const successMessage = 'お問い合わせありがとうございます。2営業日以内にご返信いたします。';
       setContactFormStatus('送信しました。お問い合わせありがとうございます。', 'success');
+      showContactPopup('送信しました', successMessage, 'success');
     } catch (error) {
+      const errorMessage = '時間をおいて再度お試しいただくか、bluebee.ink55@gmail.com へ直接ご連絡ください。';
       setContactFormStatus('送信できませんでした。時間をおいて再度お試しください。', 'error');
+      showContactPopup('送信できませんでした', errorMessage, 'error');
     } finally {
       submitButton.disabled = false;
       submitButton.textContent = originalText;
