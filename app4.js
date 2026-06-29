@@ -16,7 +16,7 @@ function closeMenu()  { document.getElementById('mobile-menu').classList.remove(
 
 /* ── Contact form → Google Forms ── */
 const GOOGLE_FORM_CONFIG = {
-  FORM_ACTION_URL: 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSd4bzibmxDbhs03kT7852twEr8Q2s_v2X55eXbfuyZjYsUTpQ/formResponse',
+  FORM_ACTION_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSd4bzibmxDbhs03kT7852twEr8Q2s_v2X55eXbfuyZjYsUTpQ/formResponse',
   ENTRIES: {
     name: 'entry.236996633',
     company: 'entry.100015974',
