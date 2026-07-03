@@ -16,7 +16,7 @@ function closeMenu()  { document.getElementById('mobile-menu').classList.remove(
 
 /* ── Contact form → Google Forms ── */
 const GOOGLE_FORM_CONFIG = {
-  FORM_ACTION_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSd4bzibmxDbhs03kT7852twEr8Q2s_v2X55eXbfuyZjYsUTpQ/formResponse',
+  FORM_ACTION_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSfcYTu6P5N7aj9gdH4iXjyMhUg6YQM-4GcuhnOp47oZsCfSYA/formResponse',
   ENTRIES: {
     name: 'entry.236996633',
     company: 'entry.100015974',
@@ -27,9 +27,9 @@ const GOOGLE_FORM_CONFIG = {
   },
   HIDDEN_FIELDS: {
     fvv: '1',
-    partialResponse: '[null,null,"5895922779701442006"]',
+    partialResponse: '[null,null,"-3044888815980624260"]',
     pageHistory: '0',
-    fbzx: '5895922779701442006',
+    fbzx: '-3044888815980624260',
     hud: 'true',
     submissionTimestamp: '-1'
   }
@@ -489,6 +489,7 @@ applyFilter();
 ══════════════════════════════════════ */
 const GCAL_CONFIG = {
   APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyi-fRybVHUcp-R5n-agJ5ykfZ2J2mm41O4n5Od49-EgWlVQHsIFwRxJ4BYhW2dQ08/exec',
+  CALENDAR_ID: '9133049c4feb1b54ce8a7f77139ca939e42d0bdb88988a0857aebd5b80feae47@group.calendar.google.com',
   SHOW_EVENT_TITLES: true,
   CACHE_TTL_MS: 0,
 };
@@ -563,6 +564,7 @@ function loadAppsScriptEvents(year, month) {
     const url = new URL(GCAL_CONFIG.APPS_SCRIPT_URL);
     url.searchParams.set('year', year);
     url.searchParams.set('month', month);
+    url.searchParams.set('calendarId', GCAL_CONFIG.CALENDAR_ID);
     url.searchParams.set('callback', callbackName);
     script.src = url.toString();
     document.head.appendChild(script);
