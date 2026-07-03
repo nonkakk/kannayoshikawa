@@ -491,14 +491,6 @@
     .contact-section .contact-right { display: flex; flex-direction: column; }
     .contact-section .cal-wrap { flex: 1; display: flex; flex-direction: column; margin-bottom: 0 !important; }
     .contact-section .cal-wrap .cal-body { flex: 1; }
-    .contact-section .calendar-embed {
-      width: 100%;
-      min-height: 520px;
-      flex: 1;
-      border: 0;
-      border-radius: 14px;
-      background: #fff;
-    }
     .contact-section .form-card { flex: 1; display: flex; flex-direction: column; }
     .contact-section .form-card .form-body { flex: 1; display: flex; flex-direction: column; }
     .contact-section .nl-box { display: none !important; }
@@ -918,12 +910,31 @@
     <div class="contact-layout">
       <div class="contact-left">
         <div class="cal-wrap">
-          <iframe
-            class="calendar-embed"
-            title="Googleカレンダー"
-            src="https://calendar.google.com/calendar/embed?src=9133049c4feb1b54ce8a7f77139ca939e42d0bdb88988a0857aebd5b80feae47%40group.calendar.google.com&ctz=Asia%2FTokyo&mode=MONTH&showTitle=0&showPrint=0&showCalendars=0&showTz=0"
-            loading="lazy">
-          </iframe>
+          <div class="cal-head">
+            <div class="cal-head-left">
+              <span class="cal-month" id="cal-month-label">読み込み中...</span>
+              <span class="cal-sync-badge" id="cal-sync-badge"><span class="cal-sync-dot"></span>Googleカレンダー連携</span>
+            </div>
+            <div class="cal-nav">
+              <button class="cal-arr" onclick="changeMonth(-1)">‹</button>
+              <button class="cal-arr cal-arr-today" onclick="goToToday()">今月</button>
+              <button class="cal-arr" onclick="changeMonth(1)">›</button>
+            </div>
+          </div>
+          <div class="cal-loading" id="cal-loading"><div class="cal-loading-spinner"></div><span>読み込み中...</span></div>
+          <div class="cal-error" id="cal-error" style="display:none;"><p class="cal-error-msg" id="cal-error-msg"></p><button class="cal-retry-btn" onclick="initCalendar()">再読み込み</button></div>
+          <div class="cal-body" id="cal-body" style="display:none;">
+            <div class="cal-grid" id="cal-grid"></div>
+            <div class="cal-event-detail" id="cal-event-detail" style="display:none;">
+              <div class="cal-event-detail-header"><span id="cal-event-date"></span><button class="cal-event-close" onclick="closeEventDetail()">✕</button></div>
+              <div id="cal-event-list"></div>
+            </div>
+          </div>
+          <div class="cal-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--maroon-light);border:1px solid var(--maroon);"></div>対応可能</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--maroon);"></div>予約済み</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#fff;border:2.5px solid var(--maroon);"></div>今日</div>
+          </div>
         </div>
         <div class="nl-box anim-in">
           <h3 class="nl-title">Newsletter</h3>
@@ -1007,7 +1018,7 @@
   </div>
 </footer>
 
-<script src="app4.js?v=20260703-calendar-embed"></script>
+<script src="app4.js?v=20260703-calendar-designed"></script>
 <script src="note-widget.js"></script>
 <script async src="https://www.instagram.com/embed.js"></script>
 </body>
