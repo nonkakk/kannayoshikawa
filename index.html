@@ -491,9 +491,17 @@
     .contact-section .contact-right { display: flex; flex-direction: column; }
     .contact-section .cal-wrap { flex: 1; display: flex; flex-direction: column; margin-bottom: 0 !important; }
     .contact-section .cal-wrap .cal-body { flex: 1; }
+    .contact-section .calendar-embed {
+      width: 100%;
+      min-height: 520px;
+      flex: 1;
+      border: 0;
+      border-radius: 14px;
+      background: #fff;
+    }
     .contact-section .form-card { flex: 1; display: flex; flex-direction: column; }
     .contact-section .form-card .form-body { flex: 1; display: flex; flex-direction: column; }
-    .contact-section .nl-box { margin-top: 22px; }
+    .contact-section .nl-box { display: none !important; }
     /* Contact: リードカード */
     .contact-intro {
       background: #ffffff;
@@ -603,7 +611,7 @@
         <a href="https://www.instagram.com/smachet777" target="_blank" rel="noopener" class="nav-social-link" aria-label="Instagram">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
         </a>
-        <a href="#" class="nav-social-link" aria-label="YouTube">
+        <a href="https://www.youtube.com/@BlueBeeKanna" target="_blank" rel="noopener" class="nav-social-link" aria-label="YouTube">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29.1 29.1 0 0 0 1 12a29.1 29.1 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29.1 29.1 0 0 0 23 12a29.1 29.1 0 0 0-.46-5.58zM9.75 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>
         </a>
         <a href="https://www.linkedin.com/in/kanna-yoshikawa-39741422b/" target="_blank" rel="noopener" class="nav-social-link" aria-label="LinkedIn">
@@ -829,7 +837,15 @@
           <div class="sns-card-banner-title">Instagram</div>
           <div class="sns-card-banner-sub">Latest Posts</div>
         </div>
-        <div class="sns-embed-area" id="instagram-embed">埋め込みコードをここに追加</div>
+        <div class="sns-embed-area" id="instagram-embed">
+          <blockquote
+            class="instagram-media"
+            data-instgrm-captioned
+            data-instgrm-permalink="https://www.instagram.com/reel/DZ9vSxlzm0l/?utm_source=ig_embed&amp;utm_campaign=loading"
+            data-instgrm-version="14"
+            style="background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px auto;max-width:540px;min-width:326px;padding:0;width:calc(100% - 2px);">
+          </blockquote>
+        </div>
       </div>
       <div class="sns-card anim-in" style="transition-delay:.12s">
         <div class="sns-card-banner">
@@ -902,31 +918,12 @@
     <div class="contact-layout">
       <div class="contact-left">
         <div class="cal-wrap">
-          <div class="cal-head">
-            <div class="cal-head-left">
-              <span class="cal-month" id="cal-month-label">読み込み中...</span>
-              <span class="cal-sync-badge" id="cal-sync-badge"><span class="cal-sync-dot"></span>Googleカレンダー連携</span>
-            </div>
-            <div class="cal-nav">
-              <button class="cal-arr" onclick="changeMonth(-1)">‹</button>
-              <button class="cal-arr cal-arr-today" onclick="goToToday()">今月</button>
-              <button class="cal-arr" onclick="changeMonth(1)">›</button>
-            </div>
-          </div>
-          <div class="cal-loading" id="cal-loading"><div class="cal-loading-spinner"></div><span>読み込み中...</span></div>
-          <div class="cal-error" id="cal-error" style="display:none;"><p class="cal-error-msg" id="cal-error-msg"></p><button class="cal-retry-btn" onclick="initCalendar()">再読み込み</button></div>
-          <div class="cal-body" id="cal-body" style="display:none;">
-            <div class="cal-grid" id="cal-grid"></div>
-            <div class="cal-event-detail" id="cal-event-detail" style="display:none;">
-              <div class="cal-event-detail-header"><span id="cal-event-date"></span><button class="cal-event-close" onclick="closeEventDetail()">✕</button></div>
-              <div id="cal-event-list"></div>
-            </div>
-          </div>
-          <div class="cal-legend">
-            <div class="legend-item"><div class="legend-dot" style="background:var(--maroon-light);border:1px solid var(--maroon);"></div>対応可能</div>
-            <div class="legend-item"><div class="legend-dot" style="background:var(--maroon);"></div>予約済み</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#fff;border:2.5px solid var(--maroon);"></div>今日</div>
-          </div>
+          <iframe
+            class="calendar-embed"
+            title="Googleカレンダー"
+            src="https://calendar.google.com/calendar/embed?src=9133049c4feb1b54ce8a7f77139ca939e42d0bdb88988a0857aebd5b80feae47%40group.calendar.google.com&ctz=Asia%2FTokyo&mode=MONTH&showTitle=0&showPrint=0&showCalendars=0&showTz=0"
+            loading="lazy">
+          </iframe>
         </div>
         <div class="nl-box anim-in">
           <h3 class="nl-title">Newsletter</h3>
@@ -1002,15 +999,16 @@
     <div class="footer-bottom">
       <p class="footer-copy">© 2026 吉川観奈 · Kobe, Japan</p>
       <div class="footer-social">
-        <a href="#">Instagram</a>
-        <a href="#">YouTube</a>
-        <a href="#">LinkedIn</a>
+        <a href="https://www.instagram.com/smachet777" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.youtube.com/@BlueBeeKanna" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.linkedin.com/in/kanna-yoshikawa-39741422b/" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </div>
   </div>
 </footer>
 
-<script src="app4.js?v=20260703-google-contact"></script>
+<script src="app4.js?v=20260703-calendar-embed"></script>
 <script src="note-widget.js"></script>
+<script async src="https://www.instagram.com/embed.js"></script>
 </body>
 </html>

@@ -729,5 +729,8 @@ function changeMonth(delta) {
   renderCalendar(calYear,calMonth);
 }
 function goToToday() { calYear=new Date().getFullYear(); calMonth=new Date().getMonth()+1; renderCalendar(calYear,calMonth); }
-function initCalendar() { renderCalendar(calYear,calMonth); }
+function initCalendar() {
+  if (!document.getElementById('cal-grid')) return;
+  renderCalendar(calYear,calMonth);
+}
 document.addEventListener('DOMContentLoaded', initCalendar);
