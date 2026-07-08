@@ -229,14 +229,18 @@ const REC_DATA = [
     keyword: '複雑な情報を視覚で届ける',
     from: '日本製薬医学会 大会主催者',
     preview: '講演の内容を的確に整理し、医学・薬学・行政など幅広い分野の要点を、美しくわかりやすい図解としてまとめてくださいました。',
-    full: `吉川さんは、私が主催した第14回日本製薬医学会年次大会において、グラフィックレコーダーとして大きな力を発揮してくれました。講演の内容を的確に整理し、医学・薬学・行政など幅広い分野の要点を、美しくわかりやすい図解としてまとめてくださいました。\n\nクロージングセッションでは、そのグラフィックをスクリーンに映しながら大会を総括し、参加者の記憶に鮮やかによみがえる講演内容と、図解による整理効果が相まって、会場全体に深い理解と感動が広がりました。\n\n吉川さんの作品は単なる記録にとどまらず、複雑な情報を整理し、視覚的に伝えることで知識の定着を促す力を持っています。`
+    full: `吉川さんは、私が主催した第14回日本製薬医学会年次大会において、グラフィックレコーダーとして大きな力を発揮してくれました。講演の内容を的確に整理し、医学・薬学・行政など幅広い分野の要点を、美しくわかりやすい図解としてまとめてくださいました。\n\nクロージングセッションでは、そのグラフィックをスクリーンに映しながら大会を総括し、参加者の記憶に鮮やかによみがえる講演内容と、図解による整理効果が相まって、会場全体に深い理解と感動が広がりました。\n\n吉川さんの作品は単なる記録にとどまらず、複雑な情報を整理し、視覚的に伝えることで知識の定着を促す力を持っています。`,
+    images: [
+      { src: 'images/fukuzatu1.png', alt: '複雑な情報を視覚で届ける グラフィック 1' },
+      { src: 'images/fukuzatu2.png', alt: '複雑な情報を視覚で届ける グラフィック 2' }
+    ]
   },
   {
     keyword: '人は人の中で癒される',
     from: '「人権・生命倫理・精神科医療」セミナー協力者',
     preview: '辛い状況や問題群を表現しながらも、淡く柔らかい色調で包み込み、理想に向かって協力する決意を描き出してくれました。',
     full: `私がグラレコに涙した理由－「人は人の中で癒される」\n\n2025年6月21日に神戸で開催されたハイブリッドセミナー「人権・生命倫理・精神科医療　改革のグランドデザインを語ろう！」に協力をいただいた吉川観奈さんのグラフィックレコーディング作品に、私は感涙してしまいました。グラレコ作品にこんなに心が打ち震える感動を受けるとは、思いも寄りませんでした。\n\nこの集いでは過酷な、非人道的ともいえる人権侵害の事例や、長期に及ぶ隔離による入院期間中に亡くなった患者さんの事例が伝えられました。しかしそうした人権侵害を無くすというだけでなく、当事者の方たちが創造的で楽しくハッピーな地域での生活を営んでいる取り組みも紹介されました。\n\n吉川さんが披露した7つのグラレコ作品は、それぞれの発表内容を素晴らしくとらえていました。その中でも胸を打たれたのは「人は人の中で癒される」という言葉とともに描かれた「母子像」です。美しい母親の弧を描くような髪と腕の中に抱かれた、涙を流しながらも微笑んでいる男の子。この姿に出会うと今も涙してしまいます。\n\n辛い状況や問題群を表現しながらも、ブルー、ピンク、紫、グリーンの淡く柔らかい色調で包み込まれ、心を寄せ合った神戸の街のシンボルとともに描かれた最後のグラレコは、理想に向かって力強く協力し、当事者・市民が主人公になって新しい世界を築いていく決意を描き出しました。\n\n吉川さんは、2回にわたる事前相談会にも参加してくださり、どんどん共感を深めてくださいました。打ち合わせ中の吉川さんの表情からも、感情の高まり、魂が引き込まれているような様子が感じられ、「社会共創」という言葉をそのまま体現するようでした。\n\n小さな力でも、心を寄せ合って、声を出し続ければ、きっと「世界を変えられる」。そんな確信を共有することができました。吉川さん、素敵な作品を本当にありがとうございました！`,
-    image: 'images/jinken.jpg',
+    image: 'images/jinken.png',
     imageAlt: '人権・生命倫理・精神科医療セミナーのグラフィックレコーディング'
   },
   {
@@ -275,10 +279,13 @@ function buildMarquee() {
 function openRecModal(idx) {
   const d = REC_DATA[idx];
   if (!d) return;
+  const modalImages = Array.isArray(d.images)
+    ? d.images.map((img, i) => `<img src="${img.src}" alt="${img.alt || ''}" class="rec-modal-img"${i > 0 ? ' style="margin-top:28px;"' : ''} onerror="this.style.display='none'">`).join('')
+    : (d.image ? `<img src="${d.image}" alt="${d.imageAlt || ''}" class="rec-modal-img" onerror="this.style.display='none'">` : '');
   document.getElementById('rec-modal-keyword').textContent = d.keyword;
   document.getElementById('rec-modal-text').innerHTML =
     d.full.split('\n\n').map(p => `<p>${p}</p>`).join('') +
-    (d.image ? `<img src="${d.image}" alt="${d.imageAlt || ''}" class="rec-modal-img" onerror="this.style.display='none'">` : '');
+    modalImages;
   document.getElementById('rec-modal-from').textContent = '― ' + d.from;
   document.getElementById('rec-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -293,10 +300,15 @@ function closeRecModal() {
    WORKS SHOWCASE
 ══════════════════════════════════════ */
 const WORKS = [
-  { cat:'leaflet',   type:'image', src:'images/tirashi.png', title:'リーフレット',         catLabel:'Leaflet'    },
-  { cat:'medical',   type:'image', src:'images/gra1.png',     title:'医療カンファレンス',   catLabel:'Healthcare'  },
-  { cat:'diversity', type:'image', src:'images/gra2.jpg',     title:'ダイバーシティ研修',   catLabel:'Inclusion'   },
-  { cat:'bilingual', type:'image', src:'images/gra3.png',     title:'バイリンガル対応',     catLabel:'Bilingual'   },
+  { cat:'diversity', tags:['bilingual','diversity'], type:'image', src:'images/gra1.png', title:'インクルージョン', catLabel:'Bilingual, Inclusion' },
+  { cat:'bilingual', tags:['bilingual'], type:'image', src:'images/gra2.jpg', title:'バイリンガル', catLabel:'Bilingual' },
+  { cat:'medical', tags:['bilingual','medical'], type:'image', src:'images/gra3.png', title:'ヘルスケア', catLabel:'Bilingual, Healthcare' },
+  { cat:'medical', tags:['medical'], type:'image', src:'images/kanjakai1.jpg', title:'患者会ディスカッション', catLabel:'Healthcare' },
+  { cat:'medical', tags:['medical'], type:'image', src:'images/kanjakai2.jpg', title:'患者会ディスカッション', catLabel:'Healthcare' },
+  { cat:'medical', tags:['medical'], type:'image', src:'images/ppi.png', title:'私たちのPPI', catLabel:'Healthcare' },
+  { cat:'medical', tags:['medical'], type:'image', src:'images/healthcare.png', title:'ヘルスケア', catLabel:'Healthcare' },
+  { cat:'diversity', tags:['bilingual','diversity'], type:'image', src:'images/diversity_inclusion1.png', title:'ダイバーシティ＆インクルージョン', catLabel:'Bilingual, Inclusion' },
+  { cat:'diversity', tags:['diversity'], type:'image', src:'images/diversity_inclusion2.jpg', title:'インクルージョン', catLabel:'Inclusion' },
   { cat:'animation', type:'video', src:'images/video1.mp4',   title:'グラレコ動画',         catLabel:'Animation'   },
 ];
 
@@ -306,7 +318,10 @@ let filteredList   = WORKS.map((_,i) => i);
 let showcaseTimer  = null;
 
 function getFilteredList() {
-  return WORKS.map((_,i) => i).filter(i => currentFilter === 'all' || WORKS[i].cat === currentFilter);
+  return WORKS.map((_,i) => i).filter(i => {
+    const tags = WORKS[i].tags || [WORKS[i].cat];
+    return currentFilter === 'all' || tags.includes(currentFilter);
+  });
 }
 
 function buildShowcase() {
